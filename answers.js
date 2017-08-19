@@ -9,7 +9,8 @@ function initializeAnswers() {
     }
 }
 
-let answers = initializeAnswers()
+var answers = initializeAnswers();
+
 function setBlank() {
     localStorage.personName = ''
     answers = [
