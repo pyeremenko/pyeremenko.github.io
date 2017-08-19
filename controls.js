@@ -17,6 +17,7 @@ const answersWrapper = $('.answers-wrapper');
 let myChart;
 
 function startQuiz() {
+    initializeAnswers();
     if (localStorage.personName != '' && typeof (localStorage.personName) != 'undefined') {
         quiz.removeClass('hidden');
         welcome.addClass('hidden');
