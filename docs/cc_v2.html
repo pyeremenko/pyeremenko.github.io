@@ -3,30 +3,63 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
 <title>CubCar — sõiduautod, kaubikud ja ATV-d</title>
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 <style type="text/tailwindcss">
+  @custom-variant dark (&:where(.dark, .dark *));
+
   @theme {
-    --color-paper:            oklch(0.978 0.004 150);
-    --color-ink:              oklch(0.215 0.018 155);
-    --color-card:             oklch(1 0 0);
-    --color-muted:            oklch(0.955 0.006 150);
-    --color-muted-foreground: oklch(0.505 0.017 155);
-    --color-line:             oklch(0.895 0.008 150);
-    --color-pine:             oklch(0.345 0.058 158);
-    --color-pine-hover:       oklch(0.295 0.055 158);
-    --color-signal:           oklch(0.775 0.152 78);
-    --color-signal-ink:       oklch(0.315 0.062 70);
+    --color-paper: var(--paper);
+    --color-ink: var(--ink);
+    --color-card: var(--card);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-line: var(--line);
+    --color-pine: var(--pine);
+    --color-pine-hover: var(--pine-hover);
+    --color-signal: var(--signal);
+    --color-signal-ink: var(--signal-ink);
 
     --radius-plate: 0.375rem;
     --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   }
 
   @layer base {
+    :root {
+      color-scheme: light;
+      --paper: oklch(0.978 0.004 150);
+      --ink: oklch(0.215 0.018 155);
+      --card: oklch(1 0 0);
+      --muted: oklch(0.955 0.006 150);
+      --muted-foreground: oklch(0.505 0.017 155);
+      --line: oklch(0.895 0.008 150);
+      --pine: oklch(0.345 0.058 158);
+      --pine-hover: oklch(0.295 0.055 158);
+      --signal: oklch(0.775 0.152 78);
+      --signal-ink: oklch(0.315 0.062 70);
+    }
+
+    .dark {
+      color-scheme: dark;
+      --paper: oklch(0.163 0.012 158);
+      --ink: oklch(0.958 0.004 150);
+      --card: oklch(0.212 0.013 158);
+      --muted: oklch(0.258 0.014 158);
+      --muted-foreground: oklch(0.688 0.011 155);
+      --line: oklch(0.305 0.012 158);
+      --pine: oklch(0.748 0.095 160);
+      --pine-hover: oklch(0.690 0.092 160);
+      --signal: oklch(0.808 0.155 80);
+      --signal-ink: oklch(0.235 0.050 70);
+    }
+
     html { scroll-behavior: smooth; }
     body { background: var(--color-paper); color: var(--color-ink); -webkit-font-smoothing: antialiased; }
     :focus-visible { outline: 2px solid var(--color-pine); outline-offset: 2px; border-radius: 2px; }
     .nums { font-variant-numeric: tabular-nums; }
+    select, input, textarea { color-scheme: light; }
+    .dark select, .dark input, .dark textarea { color-scheme: dark; }
 
     /* Ph — blurred canvas placeholder standing in for a photograph */
     ph {
@@ -73,6 +106,8 @@
     <g id="i-play"><path d="m6 3 14 9-14 9Z"/></g>
     <g id="i-tag"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5"/></g>
     <g id="i-menu"><path d="M4 6h16M4 12h16M4 18h16"/></g>
+    <g id="i-moon"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></g>
+    <g id="i-sun"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></g>
   </defs>
 </svg>
 
@@ -94,6 +129,11 @@
     </nav>
 
     <div class="ml-auto flex items-center gap-2">
+      <button id="theme-toggle" class="grid size-9 place-items-center rounded-plate border border-line bg-card transition-colors hover:bg-muted" aria-label="Vaheta valgus- ja tumeteema vahel">
+        <svg class="size-4 dark:hidden" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><use href="#i-moon"/></svg>
+        <svg class="hidden size-4 dark:block" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><use href="#i-sun"/></svg>
+      </button>
+
       <div class="hidden items-center rounded-plate border border-line bg-card p-0.5 text-[13px] sm:flex">
         <button class="rounded-[3px] bg-pine px-2 py-1 font-medium text-white">ET</button>
         <button class="rounded-[3px] px-2 py-1 text-muted-foreground transition-colors hover:text-ink">RU</button>
@@ -118,8 +158,8 @@
 <section class="relative">
   <div class="relative h-[clamp(380px,58vh,560px)]">
     <ph class="absolute inset-0" alt="Wide photograph of a dark estate car parked on a gravel yard at golden hour, pine treeline behind, low Estonian coastal light"
-        grid="8x6:fdb,fdb,fec,fec,fdb,ecb,dba,cab,fec,fed,ffe,ffe,fed,edc,dcb,cba,9a8,897,786,675,786,897,9a8,aa9,887,554,332,221,232,343,565,998,998,443,221,111,121,232,454,aa9,bba,aa9,998,998,998,aa9,bba,ccb"></ph>
-    <div class="absolute inset-0 bg-gradient-to-r from-ink/75 via-ink/45 to-ink/10"></div>
+        grid="8x6:fdb,fdb,fec,fec,fdb,ecb,dba,cab,fec,fed,ffe,ffe,fed,edc,dcb,cba,9a8,897,786,675,786,897,9a8,aa9,887,554,332,221,232,343,565,998,998,443,221,111,121,232,454,aa9,bba,aa9,998,998,998,aa9,bba,ccb" grid-dark="8x6:112,112,123,123,112,112,111,111,123,134,245,245,134,123,112,112,232,343,353,353,343,232,121,121,554,443,332,332,443,665,876,654,443,332,221,221,332,554,987,543,333,222,222,333,443,554,443,332"></ph>
+    <div class="absolute inset-0 bg-gradient-to-r from-black/75 via-black/45 to-black/10"></div>
 
     <div class="relative mx-auto flex h-full max-w-6xl flex-col justify-center px-5">
       <p class="max-w-md text-[13px] font-medium text-signal">Plats Lasnamäel, avatud E–L</p>
@@ -204,29 +244,29 @@
   <div class="grid gap-3 sm:grid-cols-3">
     <a href="#" class="relative overflow-hidden rounded-plate">
       <ph class="h-36" alt="Silver family sedan photographed side-on in a bright showroom"
-          grid="6x4:eef,eef,dee,dee,eef,eef,ccd,bbc,aab,aab,bbc,ccd,998,776,665,665,776,998,ddd,ccc,bbb,bbb,ccc,ddd"></ph>
-      <div class="absolute inset-0 bg-gradient-to-t from-ink/75 to-ink/5"></div>
+          grid="6x4:eef,eef,dee,dee,eef,eef,ccd,bbc,aab,aab,bbc,ccd,998,776,665,665,776,998,ddd,ccc,bbb,bbb,ccc,ddd" grid-dark="6x4:223,234,345,345,234,223,445,556,667,667,556,445,332,443,554,554,443,332,222,333,443,443,333,222"></ph>
+      <div class="absolute inset-0 bg-gradient-to-t from-black/75 to-black/5"></div>
       <div class="absolute inset-x-0 bottom-0 flex items-end justify-between p-4">
         <span class="text-[17px] font-semibold text-white">Sõiduautod</span>
-        <span class="nums rounded-[3px] bg-white/20 px-2 py-0.5 text-[13px] font-medium text-white backdrop-blur">24</span>
+        <span class="nums rounded-[3px] bg-black/70 px-2 py-0.5 text-[13px] font-medium text-white backdrop-blur">24</span>
       </div>
     </a>
     <a href="#" class="relative overflow-hidden rounded-plate">
       <ph class="h-36" alt="White panel van parked against a plain wall, three-quarter front view"
-          grid="6x4:dee,dee,eef,eef,dee,dee,eee,fff,fff,fff,eee,ddd,ccc,999,888,888,999,ccc,bbb,aaa,999,999,aaa,bbb"></ph>
-      <div class="absolute inset-0 bg-gradient-to-t from-ink/75 to-ink/5"></div>
+          grid="6x4:dee,dee,eef,eef,dee,dee,eee,fff,fff,fff,eee,ddd,ccc,999,888,888,999,ccc,bbb,aaa,999,999,aaa,bbb" grid-dark="6x4:112,123,234,234,123,112,667,778,889,889,778,667,445,556,667,667,556,445,222,333,332,332,333,222"></ph>
+      <div class="absolute inset-0 bg-gradient-to-t from-black/75 to-black/5"></div>
       <div class="absolute inset-x-0 bottom-0 flex items-end justify-between p-4">
         <span class="text-[17px] font-semibold text-white">Kaubikud</span>
-        <span class="nums rounded-[3px] bg-white/20 px-2 py-0.5 text-[13px] font-medium text-white backdrop-blur">8</span>
+        <span class="nums rounded-[3px] bg-black/70 px-2 py-0.5 text-[13px] font-medium text-white backdrop-blur">8</span>
       </div>
     </a>
     <a href="#" class="relative overflow-hidden rounded-plate">
       <ph class="h-36" alt="Orange quad bike on a forest trail, mud on the tyres, green undergrowth behind"
-          grid="6x4:cde,cde,bcd,bcd,cde,cde,9a7,8a6,796,796,8a6,9a7,c72,e83,f94,f94,e83,c72,875,764,653,653,764,875"></ph>
-      <div class="absolute inset-0 bg-gradient-to-t from-ink/75 to-ink/5"></div>
+          grid="6x4:cde,cde,bcd,bcd,cde,cde,9a7,8a6,796,796,8a6,9a7,c72,e83,f94,f94,e83,c72,875,764,653,653,764,875" grid-dark="6x4:121,131,141,141,131,121,232,343,454,454,343,232,863,974,a85,a85,974,863,332,221,221,221,332,443"></ph>
+      <div class="absolute inset-0 bg-gradient-to-t from-black/75 to-black/5"></div>
       <div class="absolute inset-x-0 bottom-0 flex items-end justify-between p-4">
         <span class="text-[17px] font-semibold text-white">ATV-d</span>
-        <span class="nums rounded-[3px] bg-white/20 px-2 py-0.5 text-[13px] font-medium text-white backdrop-blur">6</span>
+        <span class="nums rounded-[3px] bg-black/70 px-2 py-0.5 text-[13px] font-medium text-white backdrop-blur">6</span>
       </div>
     </a>
   </div>
@@ -244,9 +284,9 @@
     <article class="overflow-hidden rounded-plate border border-line bg-card">
       <div class="relative">
         <ph class="h-44" alt="Dark blue Škoda Octavia estate, three-quarter front view on wet tarmac"
-            grid="8x5:dde,dde,eef,eef,dde,dde,cdd,cdd,ccd,bbd,aac,99b,aac,bbd,ccd,ccd,445,334,223,223,334,445,667,889,334,223,112,112,223,334,556,778,aab,99a,899,899,99a,aab,bbc,ccd"></ph>
+            grid="8x5:dde,dde,eef,eef,dde,dde,cdd,cdd,ccd,bbd,aac,99b,aac,bbd,ccd,ccd,445,334,223,223,334,445,667,889,334,223,112,112,223,334,556,778,aab,99a,899,899,99a,aab,bbc,ccd" grid-dark="8x5:223,233,344,344,233,223,122,122,334,445,556,556,445,334,223,223,223,112,111,111,122,233,344,455,112,111,000,000,111,122,233,344,332,221,221,332,443,443,332,221"></ph>
         <span class="absolute left-3 top-3 rounded-[3px] bg-signal px-2 py-0.5 text-[12px] font-semibold text-signal-ink">Uus platsil</span>
-        <span class="nums absolute bottom-3 right-3 inline-flex items-center gap-1 rounded-[3px] bg-ink/70 px-2 py-0.5 text-[12px] font-medium text-white backdrop-blur">
+        <span class="nums absolute bottom-3 right-3 inline-flex items-center gap-1 rounded-[3px] bg-black/70 px-2 py-0.5 text-[12px] font-medium text-white backdrop-blur">
           <svg class="size-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><use href="#i-camera"/></svg>18
         </span>
       </div>
@@ -271,8 +311,8 @@
     <article class="overflow-hidden rounded-plate border border-line bg-card">
       <div class="relative">
         <ph class="h-44" alt="White Ford Transit Custom panel van, side view in an industrial yard"
-            grid="8x5:eef,eef,dde,dde,eef,eef,eef,dde,eee,fff,fff,eee,eee,ddd,ccc,bbb,ddd,eee,eee,ddd,ccc,bbb,aaa,999,999,888,777,777,888,999,aaa,bbb,bbc,aab,99a,99a,aab,bbc,ccd,ccd"></ph>
-        <span class="nums absolute bottom-3 right-3 inline-flex items-center gap-1 rounded-[3px] bg-ink/70 px-2 py-0.5 text-[12px] font-medium text-white backdrop-blur">
+            grid="8x5:eef,eef,dde,dde,eef,eef,eef,dde,eee,fff,fff,eee,eee,ddd,ccc,bbb,ddd,eee,eee,ddd,ccc,bbb,aaa,999,999,888,777,777,888,999,aaa,bbb,bbc,aab,99a,99a,aab,bbc,ccd,ccd" grid-dark="8x5:334,445,556,556,445,334,223,223,778,889,99a,99a,889,778,667,556,667,778,889,889,778,667,556,445,445,334,223,223,334,445,556,445,333,222,222,333,443,443,332,332"></ph>
+        <span class="nums absolute bottom-3 right-3 inline-flex items-center gap-1 rounded-[3px] bg-black/70 px-2 py-0.5 text-[12px] font-medium text-white backdrop-blur">
           <svg class="size-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><use href="#i-camera"/></svg>24
         </span>
       </div>
@@ -297,8 +337,8 @@
     <article class="overflow-hidden rounded-plate border border-line bg-card">
       <div class="relative">
         <ph class="h-44" alt="Red Toyota Yaris hatchback parked in front of a pale concrete wall"
-            grid="8x5:dde,dde,eef,eef,dde,dde,dde,cdd,c33,d44,e55,e55,d44,c33,b22,a22,922,a33,b44,b44,a33,922,811,711,433,322,211,211,322,433,544,655,aab,99a,899,899,99a,aab,bbc,ccd"></ph>
-        <span class="nums absolute bottom-3 right-3 inline-flex items-center gap-1 rounded-[3px] bg-ink/70 px-2 py-0.5 text-[12px] font-medium text-white backdrop-blur">
+            grid="8x5:dde,dde,eef,eef,dde,dde,dde,cdd,c33,d44,e55,e55,d44,c33,b22,a22,922,a33,b44,b44,a33,922,811,711,433,322,211,211,322,433,544,655,aab,99a,899,899,99a,aab,bbc,ccd" grid-dark="8x5:223,233,344,344,233,223,122,122,711,822,933,933,822,711,600,500,500,611,722,722,611,500,400,400,322,211,110,110,211,322,433,322,332,221,221,332,443,443,332,221"></ph>
+        <span class="nums absolute bottom-3 right-3 inline-flex items-center gap-1 rounded-[3px] bg-black/70 px-2 py-0.5 text-[12px] font-medium text-white backdrop-blur">
           <svg class="size-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><use href="#i-camera"/></svg>15
         </span>
       </div>
@@ -323,8 +363,8 @@
     <article class="overflow-hidden rounded-plate border border-line bg-card">
       <div class="relative">
         <ph class="h-44" alt="Silver Volkswagen Tiguan SUV on gravel, low winter sun from the left"
-            grid="8x5:dde,dde,eef,eef,dde,dde,dde,cdd,bbb,ccc,ddd,ddd,ccc,bbb,aaa,999,999,aaa,bbb,bbb,aaa,999,888,777,555,444,333,333,444,555,666,777,aab,99a,899,899,99a,aab,bbc,ccd"></ph>
-        <span class="nums absolute bottom-3 right-3 inline-flex items-center gap-1 rounded-[3px] bg-ink/70 px-2 py-0.5 text-[12px] font-medium text-white backdrop-blur">
+            grid="8x5:dde,dde,eef,eef,dde,dde,dde,cdd,bbb,ccc,ddd,ddd,ccc,bbb,aaa,999,999,aaa,bbb,bbb,aaa,999,888,777,555,444,333,333,444,555,666,777,aab,99a,899,899,99a,aab,bbc,ccd" grid-dark="8x5:234,245,356,356,245,234,123,123,667,778,889,889,778,667,556,445,556,667,778,778,667,556,445,334,333,222,111,111,222,333,444,333,443,332,332,443,554,554,443,332"></ph>
+        <span class="nums absolute bottom-3 right-3 inline-flex items-center gap-1 rounded-[3px] bg-black/70 px-2 py-0.5 text-[12px] font-medium text-white backdrop-blur">
           <svg class="size-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><use href="#i-camera"/></svg>21
         </span>
       </div>
@@ -349,9 +389,9 @@
     <article class="overflow-hidden rounded-plate border border-line bg-card">
       <div class="relative">
         <ph class="h-44" alt="Black Toyota Hilux pickup, rear three-quarter view on a snowy yard"
-            grid="8x5:dde,dde,eef,eef,dde,dde,cdd,cdd,333,444,555,555,444,333,222,222,222,333,444,444,333,222,111,111,444,333,222,222,333,444,555,666,aab,99a,899,899,99a,aab,bbc,ccd"></ph>
+            grid="8x5:dde,dde,eef,eef,dde,dde,cdd,cdd,333,444,555,555,444,333,222,222,222,333,444,444,333,222,111,111,444,333,222,222,333,444,555,666,aab,99a,899,899,99a,aab,bbc,ccd" grid-dark="8x5:223,234,345,345,234,223,122,122,222,333,343,343,333,222,111,111,111,222,232,232,222,111,000,000,333,222,111,111,222,333,443,332,778,667,667,778,889,889,778,667"></ph>
         <span class="absolute left-3 top-3 rounded-[3px] border border-line bg-card px-2 py-0.5 text-[12px] font-semibold">Broneeritud</span>
-        <span class="nums absolute bottom-3 right-3 inline-flex items-center gap-1 rounded-[3px] bg-ink/70 px-2 py-0.5 text-[12px] font-medium text-white backdrop-blur">
+        <span class="nums absolute bottom-3 right-3 inline-flex items-center gap-1 rounded-[3px] bg-black/70 px-2 py-0.5 text-[12px] font-medium text-white backdrop-blur">
           <svg class="size-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><use href="#i-camera"/></svg>12
         </span>
       </div>
@@ -376,8 +416,8 @@
     <article class="overflow-hidden rounded-plate border border-line bg-card">
       <div class="relative">
         <ph class="h-44" alt="Green CFMoto quad bike photographed on grass beside a forest track"
-            grid="8x5:cde,cde,bcd,bcd,cde,cde,bcd,bcd,8a7,9b8,aca,aca,9b8,8a7,796,796,353,464,575,575,464,353,242,242,764,653,542,542,653,764,875,875,987,876,765,765,876,987,a98,a98"></ph>
-        <span class="nums absolute bottom-3 right-3 inline-flex items-center gap-1 rounded-[3px] bg-ink/70 px-2 py-0.5 text-[12px] font-medium text-white backdrop-blur">
+            grid="8x5:cde,cde,bcd,bcd,cde,cde,bcd,bcd,8a7,9b8,aca,aca,9b8,8a7,796,796,353,464,575,575,464,353,242,242,764,653,542,542,653,764,875,875,987,876,765,765,876,987,a98,a98" grid-dark="8x5:121,131,141,141,131,121,121,111,242,353,464,464,353,242,131,131,253,364,475,475,364,253,142,142,332,221,221,221,332,443,332,221,443,332,332,443,443,332,332,221"></ph>
+        <span class="nums absolute bottom-3 right-3 inline-flex items-center gap-1 rounded-[3px] bg-black/70 px-2 py-0.5 text-[12px] font-medium text-white backdrop-blur">
           <svg class="size-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><use href="#i-camera"/></svg>9
         </span>
       </div>
@@ -409,7 +449,7 @@
 
       <div class="overflow-hidden rounded-plate border border-line bg-card">
         <ph class="h-40" alt="Two people shaking hands over a car bonnet, keys visible, warm afternoon light"
-            grid="8x6:eda,edb,fec,fec,edb,eda,dc9,dc9,dcb,cba,ba9,ba9,cba,dcb,cba,ba9,c98,b87,a76,a76,b87,c98,b87,a76,eca,dba,ca9,ca9,dba,eca,dba,ca9,987,876,765,765,876,987,876,765,654,543,432,432,543,654,543,432"></ph>
+            grid="8x6:eda,edb,fec,fec,edb,eda,dc9,dc9,dcb,cba,ba9,ba9,cba,dcb,cba,ba9,c98,b87,a76,a76,b87,c98,b87,a76,eca,dba,ca9,ca9,dba,eca,dba,ca9,987,876,765,765,876,987,876,765,654,543,432,432,543,654,543,432" grid-dark="8x6:654,765,876,876,765,654,543,543,543,654,765,765,654,543,432,432,765,654,543,543,654,765,654,543,987,876,765,765,876,987,876,765,543,432,321,321,432,543,432,321,332,221,221,221,332,443,332,221"></ph>
         <div class="p-6">
           <h3 class="text-xl font-semibold tracking-tight">Toome su vana auto uue vastu</h3>
           <p class="mt-2 max-w-md text-[15px] leading-relaxed text-muted-foreground">
@@ -425,7 +465,7 @@
 
       <div class="overflow-hidden rounded-plate border border-line bg-card">
         <ph class="h-40" alt="Row of cars lined up on a dealership forecourt seen from a low angle"
-            grid="8x6:eef,eef,fff,fff,eef,eef,dde,dde,ddd,eee,fff,fff,eee,ddd,ccc,ccc,ccc,bbb,ccc,ccc,bbb,ccc,ddd,ccc,998,aa9,bba,bba,aa9,998,887,887,776,665,554,554,665,776,887,887,ddd,ccc,bbb,bbb,ccc,ddd,eee,eee"></ph>
+            grid="8x6:eef,eef,fff,fff,eef,eef,dde,dde,ddd,eee,fff,fff,eee,ddd,ccc,ccc,ccc,bbb,ccc,ccc,bbb,ccc,ddd,ccc,998,aa9,bba,bba,aa9,998,887,887,776,665,554,554,665,776,887,887,ddd,ccc,bbb,bbb,ccc,ddd,eee,eee" grid-dark="8x6:122,133,244,244,133,122,111,111,344,455,566,566,455,344,233,233,443,554,665,665,554,443,332,332,332,443,554,554,443,332,221,221,554,443,332,332,443,554,443,332,332,221,221,332,443,443,332,221"></ph>
         <div class="p-6">
           <h3 class="text-xl font-semibold tracking-tight">Müü oma auto meie platsil</h3>
           <p class="mt-2 max-w-md text-[15px] leading-relaxed text-muted-foreground">
@@ -466,26 +506,26 @@
   <div class="grid grid-cols-2 gap-3 pt-6 lg:grid-cols-4">
     <a href="#" class="relative overflow-hidden rounded-plate">
       <ph class="aspect-square" alt="Close-up of a diesel engine bay, oily metal and hoses, shot for Instagram"
-          grid="5x5:887,776,665,776,887,665,554,443,554,665,aa9,998,887,998,aa9,554,443,332,443,554,776,665,554,665,776"></ph>
-      <div class="absolute inset-0 bg-gradient-to-t from-ink/70 to-transparent"></div>
+          grid="5x5:887,776,665,776,887,665,554,443,554,665,aa9,998,887,998,aa9,554,443,332,443,554,776,665,554,665,776" grid-dark="5x5:443,332,221,332,443,332,221,110,221,332,776,665,554,665,776,332,221,110,221,332,221,110,110,110,221"></ph>
+      <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
       <span class="absolute bottom-3 left-3 right-3 text-[13px] font-medium leading-snug text-white">Mis on selle mootoriga tegelikult juhtunud</span>
     </a>
     <a href="#" class="relative overflow-hidden rounded-plate">
       <ph class="aspect-square" alt="Drone shot of a car on a coastal road beside the Baltic sea"
-          grid="5x5:8ac,7ab,69a,7ab,8ac,9bd,8ac,7ab,8ac,9bd,dda,cc9,bb8,cc9,dda,887,776,665,776,887,9a8,897,786,897,9a8"></ph>
-      <div class="absolute inset-0 bg-gradient-to-t from-ink/70 to-transparent"></div>
+          grid="5x5:8ac,7ab,69a,7ab,8ac,9bd,8ac,7ab,8ac,9bd,dda,cc9,bb8,cc9,dda,887,776,665,776,887,9a8,897,786,897,9a8" grid-dark="5x5:124,235,346,235,124,235,346,457,346,235,443,332,221,332,443,332,221,110,221,332,232,121,121,121,232"></ph>
+      <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
       <span class="absolute bottom-3 left-3 right-3 text-[13px] font-medium leading-snug text-white">Nädalavahetuse sõit Peipsi äärde</span>
     </a>
     <a href="#" class="relative overflow-hidden rounded-plate">
       <ph class="aspect-square" alt="Quad bike throwing up mud on a forest trail, action shot for TikTok"
-          grid="5x5:9a8,897,786,897,9a8,754,643,532,643,754,d83,e94,fa5,e94,d83,543,432,321,432,543,654,543,432,543,654"></ph>
-      <div class="absolute inset-0 bg-gradient-to-t from-ink/70 to-transparent"></div>
+          grid="5x5:9a8,897,786,897,9a8,754,643,532,643,754,d83,e94,fa5,e94,d83,543,432,321,432,543,654,543,432,543,654" grid-dark="5x5:121,131,141,131,121,342,453,564,453,342,a73,b84,c95,b84,a73,331,220,110,220,331,221,110,110,110,221"></ph>
+      <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
       <span class="absolute bottom-3 left-3 right-3 text-[13px] font-medium leading-snug text-white">ATV soos — mis juhtub, kui kinni jääd</span>
     </a>
     <a href="#" class="relative overflow-hidden rounded-plate">
       <ph class="aspect-square" alt="Hand polishing a car bonnet with a microfibre cloth, reflections visible"
-          grid="5x5:eef,dde,ccd,dde,eef,ccd,bbc,aab,bbc,ccd,99a,889,778,889,99a,667,556,445,556,667,aab,99a,889,99a,aab"></ph>
-      <div class="absolute inset-0 bg-gradient-to-t from-ink/70 to-transparent"></div>
+          grid="5x5:eef,dde,ccd,dde,eef,ccd,bbc,aab,bbc,ccd,99a,889,778,889,99a,667,556,445,556,667,aab,99a,889,99a,aab" grid-dark="5x5:334,445,556,445,334,223,334,445,334,223,112,223,334,223,112,445,556,667,556,445,223,112,112,112,223"></ph>
+      <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
       <span class="absolute bottom-3 left-3 right-3 text-[13px] font-medium leading-snug text-white">Enne ja pärast: 2014. aasta Passat</span>
     </a>
   </div>
@@ -528,19 +568,19 @@
   <div class="grid gap-6 pt-6 sm:grid-cols-3">
     <a href="#" class="group">
       <ph class="h-40 rounded-plate" alt="Snow-covered Estonian road at dusk with tyre tracks in fresh snow"
-          grid="8x5:eef,eef,dde,dde,eef,eef,eef,dde,ddd,eee,fff,fff,eee,ddd,ccc,ccc,bbc,ccd,dde,dde,ccd,bbc,aab,aab,889,778,667,667,778,889,99a,99a,eee,fff,fff,eee,ddd,ccc,ddd,eee"></ph>
+          grid="8x5:eef,eef,dde,dde,eef,eef,eef,dde,ddd,eee,fff,fff,eee,ddd,ccc,ccc,bbc,ccd,dde,dde,ccd,bbc,aab,aab,889,778,667,667,778,889,99a,99a,eee,fff,fff,eee,ddd,ccc,ddd,eee" grid-dark="8x4:222,232,343,343,232,222,121,121,332,443,554,554,443,332,221,221,443,332,221,221,332,443,332,221,222,111,111,111,222,333,222,111"></ph>
       <div class="nums mt-3 text-[13px] text-muted-foreground">14. oktoober 2026</div>
       <h3 class="mt-1 max-w-[34ch] text-[16px] font-semibold leading-snug group-hover:underline group-hover:decoration-line group-hover:underline-offset-4">Millal Eestis talverehvid alla panna ja millal see tegelikult mõttekas on</h3>
     </a>
     <a href="#" class="group">
       <ph class="h-40 rounded-plate" alt="German autobahn seen through a windscreen, cars in motion blur"
-          grid="8x5:cde,cde,dde,dde,cde,cde,bcd,bcd,9ab,8a9,798,798,8a9,9ab,899,899,887,776,665,665,776,887,998,998,998,887,776,776,887,998,aa9,aa9,bba,aa9,998,998,aa9,bba,ccb,ccb"></ph>
+          grid="8x5:cde,cde,dde,dde,cde,cde,bcd,bcd,9ab,8a9,798,798,8a9,9ab,899,899,887,776,665,665,776,887,998,998,998,887,776,776,887,998,aa9,aa9,bba,aa9,998,998,aa9,bba,ccb,ccb" grid-dark="8x5:234,245,356,356,245,234,123,123,445,556,667,667,556,445,334,334,334,445,556,556,445,334,223,223,223,112,111,111,112,223,334,334,889,99a,aab,99a,889,778,889,99a"></ph>
       <div class="nums mt-3 text-[13px] text-muted-foreground">2. oktoober 2026</div>
       <h3 class="mt-1 max-w-[34ch] text-[16px] font-semibold leading-snug group-hover:underline group-hover:decoration-line group-hover:underline-offset-4">Auto toomine Saksamaalt: mis maksab tegelikult peale hinnasildi</h3>
     </a>
     <a href="#" class="group">
       <ph class="h-40 rounded-plate" alt="Quad bike on a workshop lift, tools laid out on a bench nearby"
-          grid="8x5:ddc,ccb,bba,bba,ccb,ddc,ccb,bba,998,887,776,776,887,998,887,776,b95,ca6,db7,db7,ca6,b95,a84,a84,665,554,443,443,554,665,554,443,887,776,665,665,776,887,776,665"></ph>
+          grid="8x5:ddc,ccb,bba,bba,ccb,ddc,ccb,bba,998,887,776,776,887,998,887,776,b95,ca6,db7,db7,ca6,b95,a84,a84,665,554,443,443,554,665,554,443,887,776,665,665,776,887,776,665" grid-dark="8x5:112,123,234,234,123,112,111,111,221,332,443,443,332,221,110,110,322,433,544,544,433,322,211,211,811,922,a33,a33,922,811,700,700,332,221,221,332,443,443,332,221"></ph>
       <div class="nums mt-3 text-[13px] text-muted-foreground">21. september 2026</div>
       <h3 class="mt-1 max-w-[34ch] text-[16px] font-semibold leading-snug group-hover:underline group-hover:decoration-line group-hover:underline-offset-4">ATV hooldus enne hooaega: viis asja, mida ise ära teha</h3>
     </a>
@@ -580,7 +620,7 @@
       </dl>
 
       <ph class="mt-6 h-52 rounded-plate border border-line" alt="Street map showing the CubCar forecourt location in Lasnamäe, Tallinn, with a marker pin"
-          grid="12x6:dec,ded,eee,eee,ded,dec,eee,eee,ded,dec,eee,eee,eee,eee,ddd,eee,eee,eee,ded,eee,eee,eee,ddd,eee,ccc,ccc,ccc,ccc,ccc,ccc,ccc,ccc,ccc,ccc,ccc,ccc,eee,ded,eee,eee,ddd,eee,eee,ded,eee,eee,ddd,eee,cde,bce,ace,ace,bce,cde,eee,eee,ded,eee,eee,eee,eee,eee,eee,ded,eee,eee,eee,ddd,eee,eee,ded,eee"></ph>
+          grid="12x6:dec,ded,eee,eee,ded,dec,eee,eee,ded,dec,eee,eee,eee,eee,ddd,eee,eee,eee,ded,eee,eee,eee,ddd,eee,ccc,ccc,ccc,ccc,ccc,ccc,ccc,ccc,ccc,ccc,ccc,ccc,eee,ded,eee,eee,ddd,eee,eee,ded,eee,eee,ddd,eee,cde,bce,ace,ace,bce,cde,eee,eee,ded,eee,eee,eee,eee,eee,eee,ded,eee,eee,eee,ddd,eee,eee,ded,eee" grid-dark="12x6:122,122,111,111,122,122,111,111,122,122,111,111,111,111,232,111,111,111,122,111,111,111,232,111,344,344,344,344,344,344,344,344,344,344,344,344,111,122,111,111,232,111,111,122,111,111,232,111,123,134,145,145,134,123,111,111,122,111,111,111,111,111,111,122,111,111,111,232,111,111,122,111"></ph>
     </div>
 
     <div class="rounded-plate border border-line bg-card p-6">
@@ -698,8 +738,12 @@
 <!-- ── Ph: paint the grid to canvas at native size, upscale + blur ────── -->
 <script>
 (function () {
+  var root = document.documentElement;
+  var toggle = document.getElementById('theme-toggle');
+
   function paint(el) {
-    var spec = el.getAttribute('grid');
+    var dark = root.classList.contains('dark');
+    var spec = (dark && el.getAttribute('grid-dark')) || el.getAttribute('grid');
     if (!spec) return;
 
     var parts = spec.split(':');
@@ -707,6 +751,9 @@
     var w = parseInt(dims[0], 10);
     var h = parseInt(dims[1], 10);
     var cells = parts[1].split(',');
+
+    var old = el.querySelector('canvas');
+    if (old) old.remove();
 
     var c = document.createElement('canvas');
     c.width = w;
@@ -727,7 +774,34 @@
     if (alt) el.setAttribute('aria-label', alt);
   }
 
-  document.querySelectorAll('ph[grid]').forEach(paint);
+  function paintAll() {
+    document.querySelectorAll('ph[grid]').forEach(paint);
+  }
+
+  function setTheme(dark) {
+    root.classList.toggle('dark', dark);
+    try {
+      localStorage.setItem('cubcar-theme', dark ? 'dark' : 'light');
+    } catch (err) {}
+    paintAll();
+  }
+
+  var saved = null;
+  try {
+    saved = localStorage.getItem('cubcar-theme');
+  } catch (err) {}
+
+  if (saved === 'dark' || (saved !== 'light' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    root.classList.add('dark');
+  }
+
+  paintAll();
+
+  if (toggle) {
+    toggle.addEventListener('click', function () {
+      setTheme(!root.classList.contains('dark'));
+    });
+  }
 })();
 </script>
 
