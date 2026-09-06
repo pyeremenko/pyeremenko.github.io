@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CubCar — autod, kaubikud, ATV-d</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+<style type="text/tailwindcss">
+  @theme {
+    --color-paper:     #F1F3EF;
+    --color-card:      #FFFFFF;
+    --color-ink:       #131A17;
+    --color-soft:      #59635D;
+    --color-rule:      #D3D9D2;
+    --color-pine:      #0E5C4A;
+    --color-pinedark:  #093A2E;
+    --color-amber:     #F2B705;
+    --color-clay:      #A8452B;
+    --font-sans: "Onest", ui-sans-serif, system-ui, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  }
+</style>
+
+<style>
+  :root { color-scheme: light; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+
+  /* ---- Ph: blurred low-res colour-grid placeholder ---- */
+  Ph, ph {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    background: #dfe3de;
+  }
+  Ph > canvas, ph > canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    filter: blur(14px);
+    transform: scale(1.16);
+    display: block;
+  }
+
+  /* thin top-edge highlight on media, so photos read as photos not blocks */
+  .media { position: relative; }
+  .media::after {
+    content: "";
+    position: absolute; inset: 0;
+    box-shadow: inset 0 0 0 1px rgb(19 26 23 / .07);
+    border-radius: inherit;
+    pointer-events: none;
+  }
+
+  .rule-top { border-top: 1px solid var(--color-rule); }
+
+  :focus-visible { outline: 2px solid #0E5C4A; outline-offset: 2px; border-radius: 3px; }
+
+  /* spec grid used on listing cards — real tabular data, so it gets tabular figures */
+  .spec { font-variant-numeric: tabular-nums; }
+</style>
+</head>
+
+<body class="bg-paper text-ink font-sans antialiased">
+
+<!-- ══════════ utility bar ══════════ -->
+<div class="bg-pinedark text-white/90 text-[13px]">
+  <div class="mx-auto max-w-[1180px] px-5 h-9 flex items-center justify-between gap-4">
+    <nav aria-label="Keel" class="flex items-center gap-1">
+      <a href="#" aria-current="page" class="px-2 py-0.5 rounded bg-white/15 text-white">ET</a>
+      <a href="#" class="px-2 py-0.5 rounded hover:bg-white/10">RU</a>
+      <a href="#" class="px-2 py-0.5 rounded hover:bg-white/10">EN</a>
+      <a href="#" class="px-2 py-0.5 rounded hover:bg-white/10">FI</a>
+    </nav>
+    <div class="flex items-center gap-5">
+      <span class="hidden sm:inline text-white/60">E–R 9–18, L 10–15</span>
+      <a href="tel:+3725112233" class="font-mono tracking-tight hover:text-amber">+372 511 2233</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ header ══════════ -->
+<header class="bg-card border-b border-rule sticky top-0 z-30">
+  <div class="mx-auto max-w-[1180px] px-5 h-[68px] flex items-center gap-8">
+    <a href="#" class="flex items-center gap-2.5 shrink-0">
+      <span class="grid place-items-center w-9 h-9 rounded-[9px] bg-pine text-amber font-extrabold text-lg leading-none">C</span>
+      <span class="text-[21px] font-extrabold tracking-[-.03em]">CubCar</span>
+    </a>
+    <nav class="hidden md:flex items-center gap-6 text-[15px] text-soft">
+      <a href="#stock" class="hover:text-ink">Müügil</a>
+      <a href="#trade" class="hover:text-ink">Vahetus</a>
+      <a href="#trade" class="hover:text-ink">Komisjonimüük</a>
+      <a href="#journal" class="hover:text-ink">Blogi</a>
+      <a href="#visit" class="hover:text-ink">Kontakt</a>
+    </nav>
+    <div class="ml-auto flex items-center gap-2">
+      <a href="#trade" class="hidden sm:inline-flex items-center h-10 px-4 rounded-[9px] border border-rule text-[15px] font-medium hover:border-ink/40">Hinda mu autot</a>
+      <a href="#stock" class="inline-flex items-center h-10 px-4 rounded-[9px] bg-pine text-white text-[15px] font-medium hover:bg-pinedark">Vaata laoseisu</a>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════ hero ══════════ -->
+<section class="relative">
+  <div class="media relative h-[440px] sm:h-[520px] overflow-hidden">
+    <Ph class="absolute inset-0 w-full h-full"
+        alt="Silver estate car parked on a dealership forecourt under an overcast Baltic sky, low buildings on the horizon"
+        grid="10x6:dde,dde,eee,eee,dde,dde,dde,eee,eee,dde,cdd,cdd,ccd,bcc,abb,9aa,abb,bcc,ccd,cdd,bbb,bbb,aab,99a,889,889,99a,aab,bbb,bbb,aa9,998,ccd,ddd,dde,dde,ddd,ccd,998,aa9,776,665,776,887,887,887,887,776,665,776,998,998,aa9,aa9,998,998,aa9,aa9,998,998"></Ph>
+    <div class="absolute inset-0 bg-gradient-to-r from-ink/70 via-ink/35 to-transparent"></div>
+
+    <div class="relative mx-auto max-w-[1180px] px-5 h-full flex flex-col justify-center">
+      <h1 class="max-w-[16ch] text-white text-[42px] sm:text-[60px] leading-[.98] font-extrabold tracking-[-.035em]">
+        Näed täna, sõidad sel nädalal.
+      </h1>
+      <p class="mt-5 max-w-[46ch] text-white/85 text-[17px] leading-relaxed">
+        Ostame ja müüme sõiduautosid, kaubikuid ja ATV-sid Tallinnas.
+        Kõik, mis sellel lehel on, seisab praegu platsil.
+      </p>
+
+      <div class="mt-8 flex flex-wrap gap-x-10 gap-y-3 spec">
+        <div><span class="font-mono text-[30px] font-bold text-amber leading-none">34</span><span class="ml-2 text-white/70 text-[15px]">sõiduautot</span></div>
+        <div><span class="font-mono text-[30px] font-bold text-amber leading-none">11</span><span class="ml-2 text-white/70 text-[15px]">kaubikut</span></div>
+        <div><span class="font-mono text-[30px] font-bold text-amber leading-none">7</span><span class="ml-2 text-white/70 text-[15px]">ATV-d</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- filter strip: the Tier-1 requirement promoted into the hero -->
+  <div class="mx-auto max-w-[1180px] px-5">
+    <form class="-mt-9 relative bg-card border border-rule rounded-[14px] p-3 sm:p-4 grid gap-3 grid-cols-2 lg:grid-cols-[repeat(4,1fr)_auto] shadow-[0_10px_30px_-18px_rgb(19_26_23/.35)]">
+      <label class="grid gap-1.5">
+        <span class="text-[13px] text-soft">Mark</span>
+        <select class="h-11 rounded-[9px] border border-rule bg-card px-3 text-[15px] hover:border-ink/30">
+          <option>Kõik margid</option><option>Volkswagen</option><option>Toyota</option><option>Škoda</option><option>Ford</option><option>CFMOTO</option>
+        </select>
+      </label>
+      <label class="grid gap-1.5">
+        <span class="text-[13px] text-soft">Kütus</span>
+        <select class="h-11 rounded-[9px] border border-rule bg-card px-3 text-[15px] hover:border-ink/30">
+          <option>Kõik</option><option>Diisel</option><option>Bensiin</option><option>Hübriid</option><option>Elekter</option>
+        </select>
+      </label>
+      <label class="grid gap-1.5">
+        <span class="text-[13px] text-soft">Käigukast</span>
+        <select class="h-11 rounded-[9px] border border-rule bg-card px-3 text-[15px] hover:border-ink/30">
+          <option>Kõik</option><option>Manuaal</option><option>Automaat</option>
+        </select>
+      </label>
+      <label class="grid gap-1.5">
+        <span class="text-[13px] text-soft">Vedav sild</span>
+        <select class="h-11 rounded-[9px] border border-rule bg-card px-3 text-[15px] hover:border-ink/30">
+          <option>Kõik</option><option>Esivedu</option><option>Tagavedu</option><option>Nelivedu</option>
+        </select>
+      </label>
+      <button type="button" class="col-span-2 lg:col-span-1 h-11 lg:mt-[26px] px-6 rounded-[9px] bg-pine text-white font-medium hover:bg-pinedark">
+        Näita 52 sõidukit
+      </button>
+    </form>
+  </div>
+</section>
+
+<!-- ══════════ categories ══════════ -->
+<section class="mx-auto max-w-[1180px] px-5 pt-16">
+  <div class="grid gap-4 sm:grid-cols-3">
+
+    <a href="#stock" class="group block bg-card border border-rule rounded-[14px] overflow-hidden hover:border-ink/35">
+      <Ph class="media w-full aspect-[4/3]"
+          alt="Dark blue estate car photographed three-quarter front on a bright overcast day"
+          grid="6x4:dde,dde,eee,eee,dde,dde,bcd,abc,345,346,abc,bcd,998,234,235,235,234,998,aa9,887,776,776,887,aa9"></Ph>
+      <div class="p-4 flex items-baseline justify-between">
+        <span class="text-[19px] font-semibold tracking-[-.02em]">Sõiduautod</span>
+        <span class="font-mono text-[15px] text-soft spec">34</span>
+      </div>
+    </a>
+
+    <a href="#stock" class="group block bg-card border border-rule rounded-[14px] overflow-hidden hover:border-ink/35">
+      <Ph class="media w-full aspect-[4/3]"
+          alt="White panel van in side profile against a pale sky"
+          grid="6x4:dde,eee,eee,eee,eee,dde,cdd,eee,fff,fff,eee,cdd,bbb,ddd,eee,eee,ddd,bbb,998,887,776,776,887,998"></Ph>
+      <div class="p-4 flex items-baseline justify-between">
+        <span class="text-[19px] font-semibold tracking-[-.02em]">Kaubikud</span>
+        <span class="font-mono text-[15px] text-soft spec">11</span>
+      </div>
+    </a>
+
+    <a href="#stock" class="group block bg-card border border-rule rounded-[14px] overflow-hidden hover:border-ink/35">
+      <Ph class="media w-full aspect-[4/3]"
+          alt="Orange quad bike standing on a dirt track with churned mud around the tyres"
+          grid="6x4:cdd,cde,dde,dde,cde,ccd,aa9,c73,e83,d73,b62,998,986,a63,c72,b62,975,875,875,764,764,875,986,986"></Ph>
+      <div class="p-4 flex items-baseline justify-between">
+        <span class="text-[19px] font-semibold tracking-[-.02em]">ATV-d</span>
+        <span class="font-mono text-[15px] text-soft spec">7</span>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- ══════════ stock ══════════ -->
+<section id="stock" class="mx-auto max-w-[1180px] px-5 pt-16">
+  <div class="flex flex-wrap items-end justify-between gap-4 pb-4 border-b border-rule">
+    <h2 class="text-[32px] font-extrabold tracking-[-.03em]">Praegu platsil</h2>
+    <p class="text-soft text-[15px]">Uuendatud <span class="font-mono spec">6. september</span></p>
+  </div>
+
+  <div class="grid gap-4 pt-6 sm:grid-cols-2 lg:grid-cols-3">
+
+    <!-- 1 -->
+    <article class="bg-card border border-rule rounded-[14px] overflow-hidden hover:border-ink/35">
+      <div class="relative">
+        <Ph class="media w-full aspect-[3/2]"
+            alt="Dark blue Volkswagen Passat estate, front three-quarter view on tarmac"
+            grid="5x4:dde,eee,eee,dde,dde,acd,235,346,235,bcd,998,123,234,123,998,aa9,887,776,887,aa9"></Ph>
+        <span class="absolute top-3 left-3 rounded-[6px] bg-amber text-ink text-[12px] font-semibold px-2 py-1">Uus platsil</span>
+      </div>
+      <div class="p-4">
+        <h3 class="text-[17px] font-semibold tracking-[-.015em]">Volkswagen Passat 2.0 TDI</h3>
+        <dl class="mt-3 grid grid-cols-2 gap-y-1.5 text-[14px] spec">
+          <div class="flex gap-2"><dt class="text-soft w-14">Aasta</dt><dd class="font-mono">2019</dd></div>
+          <div class="flex gap-2"><dt class="text-soft w-14">Läbisõit</dt><dd class="font-mono">148 200 km</dd></div>
+          <div class="flex gap-2"><dt class="text-soft w-14">Kütus</dt><dd>Diisel</dd></div>
+          <div class="flex gap-2"><dt class="text-soft w-14">Kast</dt><dd>Automaat</dd></div>
+        </dl>
+        <div class="mt-4 pt-3 rule-top flex items-baseline justify-between">
+          <span class="font-mono text-[22px] font-bold tracking-tight spec">14 900 €</span>
+          <span class="text-[13px] text-soft font-mono spec">al. 189 €/kuus</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- 2 -->
+    <article class="bg-card border border-rule rounded-[14px] overflow-hidden hover:border-ink/35">
+      <div class="relative">
+        <Ph class="media w-full aspect-[3/2]"
+            alt="White Ford Transit panel van, side view in a yard"
+            grid="5x4:dde,eee,eee,eee,dde,ccd,eee,fff,eee,ccd,aab,ddd,eee,ddd,bbb,998,887,887,887,998"></Ph>
+      </div>
+      <div class="p-4">
+        <h3 class="text-[17px] font-semibold tracking-[-.015em]">Ford Transit 2.0 EcoBlue</h3>
+        <dl class="mt-3 grid grid-cols-2 gap-y-1.5 text-[14px] spec">
+          <div class="flex gap-2"><dt class="text-soft w-14">Aasta</dt><dd class="font-mono">2020</dd></div>
+          <div class="flex gap-2"><dt class="text-soft w-14">Läbisõit</dt><dd class="font-mono">96 400 km</dd></div>
+          <div class="flex gap-2"><dt class="text-soft w-14">Kütus</dt><dd>Diisel</dd></div>
+          <div class="flex gap-2"><dt class="text-soft w-14">Kast</dt><dd>Manuaal</dd></div>
+        </dl>
+        <div class="mt-4 pt-3 rule-top flex items-baseline justify-between">
+          <span class="font-mono text-[22px] font-bold tracking-tight spec">18 400 €</span>
+          <span class="text-[13px] text-soft font-mono spec">al. 233 €/kuus</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- 3 -->
+    <article class="bg-card border border-rule rounded-[14px] overflow-hidden hover:border-ink/35">
+      <div class="relative">
+        <Ph class="media w-full aspect-[3/2]"
+            alt="Red Škoda Fabia hatchback parked in front of a pale wall"
+            grid="5x4:dde,eee,dde,eee,dde,bcd,a22,c33,a22,bcd,998,811,922,811,998,aa9,887,776,887,aa9"></Ph>
+        <span class="absolute top-3 left-3 rounded-[6px] bg-clay text-white text-[12px] font-semibold px-2 py-1">Broneeritud</span>
+      </div>
+      <div class="p-4">
+        <h3 class="text-[17px] font-semibold tracking-[-.015em]">Škoda Fabia 1.0 TSI</h3>
+        <dl class="mt-3 grid grid-cols-2 gap-y-1.5 text-[14px] spec">
+          <div class="flex gap-2"><dt class="text-soft w-14">Aasta</dt><dd class="font-mono">2021</dd></div>
+          <div class="flex gap-2"><dt class="text-soft w-14">Läbisõit</dt><dd class="font-mono">41 700 km</dd></div>
+          <div class="flex gap-2"><dt class="text-soft w-14">Kütus</dt><dd>Bensiin</dd></div>
+          <div class="flex gap-2"><dt class="text-soft w-14">Kast</dt><dd>Manuaal</dd></div>
+        </dl>
+        <div class="mt-4 pt-3 rule-top flex items-baseline justify-between">
+          <span class="font-mono text-[22px] font-bold tracking-tight spec">11 250 €</span>
+          <span class="text-[13px] text-soft font-mono spec">al. 143 €/kuus</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- 4 -->
+    <article class="bg-card border border-rule rounded-[14px] overflow-hidden hover:border-ink/35">
+      <div class="relative">
+        <Ph class="media w-full aspect-[3/2]"
+            alt="Silver Toyota RAV4 crossover on a gravel forecourt"
+            grid="5x4:cdd,dde,eee,dde,cdd,bcc,bbc,ccd,bbc,bcc,998,99a,aab,99a,998,aa9,776,776,776,aa9"></Ph>
+      </div>
+      <div class="p-4">
+        <h3 class="text-[17px] font-semibold tracking-[-.015em]">Toyota RAV4 2.5 Hybrid</h3>
+        <dl class="mt-3 grid grid-cols-2 gap-y-1.5 text-[14px] spec">
+          <div class="flex gap-2"><dt class="text-soft w-14">Aasta</dt><dd class="font-mono">2018</dd></div>
+          <div class="flex gap-2"><dt class="text-soft w-14">Läbisõit</dt><dd class="font-mono">172 900 km</dd></div>
+          <div class="flex gap-2"><dt class="text-soft w-14">Kütus</dt><dd>Hübriid</dd></div>
+          <div class="flex gap-2"><dt class="text-soft w-14">Vedu</dt><dd>Nelivedu</dd></div>
+        </dl>
+        <div class="mt-4 pt-3 rule-top flex items-baseline justify-between">
+          <span class="font-mono text-[22px] font-bold tracking-tight spec">19 800 €</span>
+          <span class="text-[13px] text-soft font-mono spec">al. 251 €/kuus</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- 5 -->
+    <article class="bg-card border border-rule rounded-[14px] overflow-hidden hover:border-ink/35">
+      <div class="relative">
+        <Ph class="media w-full aspect-[3/2]"
+            alt="Green CFMOTO quad bike on grass at the edge of a forest track"
+            grid="5x4:cde,dde,dde,cde,cdd,aa9,373,484,373,998,986,262,373,262,875,875,764,764,875,986"></Ph>
+      </div>
+      <div class="p-4">
+        <h3 class="text-[17px] font-semibold tracking-[-.015em]">CFMOTO CForce 850</h3>
+        <dl class="mt-3 grid grid-cols-2 gap-y-1.5 text-[14px] spec">
+          <div class="flex gap-2"><dt class="text-soft w-14">Aasta</dt><dd class="font-mono">2022</dd></div>
+          <div class="flex gap-2"><dt class="text-soft w-14">Mootor</dt><dd class="font-mono">800 cm³</dd></div>
+          <div class="flex gap-2"><dt class="text-soft w-14">Võimsus</dt><dd class="font-mono">52 kW</dd></div>
+          <div class="flex gap-2"><dt class="text-soft w-14">Vedu</dt><dd>Nelivedu</dd></div>
+        </dl>
+        <div class="mt-4 pt-3 rule-top flex items-baseline justify-between">
+          <span class="font-mono text-[22px] font-bold tracking-tight spec">8 650 €</span>
+          <span class="text-[13px] text-soft font-mono spec">al. 110 €/kuus</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- 6 -->
+    <article class="bg-card border border-rule rounded-[14px] overflow-hidden hover:border-ink/35">
+      <div class="relative">
+        <Ph class="media w-full aspect-[3/2]"
+            alt="Black BMW 5 Series saloon photographed at dusk with reflections on the bonnet"
+            grid="5x4:dde,eee,eee,dde,dde,bcd,222,333,222,bcd,998,111,222,111,998,aa9,776,665,776,aa9"></Ph>
+      </div>
+      <div class="p-4">
+        <h3 class="text-[17px] font-semibold tracking-[-.015em]">BMW 520d xDrive</h3>
+        <dl class="mt-3 grid grid-cols-2 gap-y-1.5 text-[14px] spec">
+          <div class="flex gap-2"><dt class="text-soft w-14">Aasta</dt><dd class="font-mono">2017</dd></div>
+          <div class="flex gap-2"><dt class="text-soft w-14">Läbisõit</dt><dd class="font-mono">211 300 km</dd></div>
+          <div class="flex gap-2"><dt class="text-soft w-14">Kütus</dt><dd>Diisel</dd></div>
+          <div class="flex gap-2"><dt class="text-soft w-14">Kast</dt><dd>Automaat</dd></div>
+        </dl>
+        <div class="mt-4 pt-3 rule-top flex items-baseline justify-between">
+          <span class="font-mono text-[22px] font-bold tracking-tight spec">16 400 €</span>
+          <span class="text-[13px] text-soft font-mono spec">al. 208 €/kuus</span>
+        </div>
+      </div>
+    </article>
+
+  </div>
+
+  <div class="pt-7">
+    <a href="#" class="inline-flex items-center h-11 px-6 rounded-[9px] border border-ink/25 font-medium hover:bg-card">Kõik 52 sõidukit</a>
+  </div>
+</section>
+
+<!-- ══════════ trade-in + commission ══════════ -->
+<section id="trade" class="mt-20 bg-pinedark text-white">
+  <div class="mx-auto max-w-[1180px] px-5 py-16 grid gap-10 lg:grid-cols-[1.1fr_1fr] items-center">
+
+    <div>
+      <h2 class="text-[34px] sm:text-[40px] font-extrabold tracking-[-.03em] leading-[1.05] max-w-[18ch]">
+        Sinu auto võib olla osa järgmisest.
+      </h2>
+      <p class="mt-5 text-white/75 text-[17px] leading-relaxed max-w-[52ch]">
+        Saada paar pilti ja läbisõit. Vastame tavaliselt sama päeva jooksul
+        ning ütleme kohe, kas võtame vahetusse või paneme komisjonimüüki.
+      </p>
+
+      <div class="mt-8 grid sm:grid-cols-2 gap-4">
+        <div class="rounded-[14px] bg-white/8 border border-white/15 p-5">
+          <h3 class="text-[18px] font-semibold">Vahetus</h3>
+          <p class="mt-2 text-[15px] text-white/70 leading-relaxed">Arvestame su auto uue hinna sisse. Raha liigub ühe tehinguga.</p>
+        </div>
+        <div class="rounded-[14px] bg-white/8 border border-white/15 p-5">
+          <h3 class="text-[18px] font-semibold">Komisjonimüük</h3>
+          <p class="mt-2 text-[15px] text-white/70 leading-relaxed">Auto seisab meie platsil, müügiga tegeleme meie. Sina saad turuhinna.</p>
+        </div>
+      </div>
+
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="#" class="inline-flex items-center h-12 px-6 rounded-[9px] bg-amber text-ink font-semibold hover:brightness-95">Saada oma auto andmed</a>
+        <a href="tel:+3725112233" class="inline-flex items-center h-12 px-6 rounded-[9px] border border-white/30 font-medium hover:bg-white/10 font-mono">+372 511 2233</a>
+      </div>
+    </div>
+
+    <Ph class="media w-full aspect-[4/3] rounded-[16px]"
+        alt="Two people shaking hands over an open car bonnet, keys visible in one hand, warm indoor showroom light"
+        grid="8x5:dde,dde,eee,eee,dde,dde,dde,eee,ccd,bbc,cba,dcb,dcb,cba,bbc,ccd,aab,c97,eb9,fca,fca,eb9,c97,aab,99a,a86,c97,da8,da8,c97,a86,99a,887,776,776,887,887,776,776,887"></Ph>
+
+  </div>
+</section>
+
+<!-- ══════════ three sources ══════════ -->
+<section class="mx-auto max-w-[1180px] px-5 pt-16">
+  <div class="pb-4 border-b border-rule">
+    <h2 class="text-[32px] font-extrabold tracking-[-.03em]">Kust meid leiab</h2>
+    <p class="mt-2 text-soft text-[16px] max-w-[60ch]">Kuulutused Auto24-s, sisu Instagramis ja TikTokis. Kolm kohta, üks plats.</p>
+  </div>
+
+  <div class="grid gap-4 pt-6 sm:grid-cols-3">
+
+    <a href="#" class="bg-card border border-rule rounded-[14px] p-4 hover:border-ink/35">
+      <Ph class="media w-full aspect-square rounded-[10px]"
+          alt="Screenshot of a classified listing grid with vehicle thumbnails on a white page"
+          grid="4x4:eee,eee,eee,eee,eee,ccd,ccd,eee,eee,ccd,ccd,eee,ddd,ddd,ddd,ddd"></Ph>
+      <h3 class="mt-4 text-[18px] font-semibold">Auto24.ee</h3>
+      <p class="mt-1.5 text-[15px] text-soft leading-relaxed">Kõik sõidukid on ka Auto24-s, samade hindadega.</p>
+    </a>
+
+    <a href="#" class="bg-card border border-rule rounded-[14px] p-4 hover:border-ink/35">
+      <Ph class="media w-full aspect-square rounded-[10px]"
+          alt="Person filming a car interior on a phone, warm light through the windscreen"
+          grid="4x4:dde,dcc,cbb,ccd,ba9,c97,b86,a98,987,da9,c97,876,665,776,665,554"></Ph>
+      <h3 class="mt-4 text-[18px] font-semibold">Instagram</h3>
+      <p class="mt-1.5 text-[15px] text-soft leading-relaxed">Uued autod platsil, tehingud, ja natuke nalja vahele.</p>
+    </a>
+
+    <a href="#" class="bg-card border border-rule rounded-[14px] p-4 hover:border-ink/35">
+      <Ph class="media w-full aspect-square rounded-[10px]"
+          alt="Orange quad bike mid-air over a dirt jump, dust cloud behind"
+          grid="4x4:cde,dde,cde,ccd,aa9,c73,b62,998,875,a52,975,764,764,653,653,764"></Ph>
+      <h3 class="mt-4 text-[18px] font-semibold">TikTok</h3>
+      <p class="mt-1.5 text-[15px] text-soft leading-relaxed">ATV-d mudas ja lühikesed testisõidud.</p>
+    </a>
+
+  </div>
+</section>
+
+<!-- ══════════ journal ══════════ -->
+<section id="journal" class="mx-auto max-w-[1180px] px-5 pt-16">
+  <div class="flex flex-wrap items-end justify-between gap-4 pb-4 border-b border-rule">
+    <h2 class="text-[32px] font-extrabold tracking-[-.03em]">Kasulik teada</h2>
+    <a href="#" class="text-[15px] text-pine font-medium hover:underline underline-offset-4">Kõik lood</a>
+  </div>
+
+  <div class="grid gap-6 pt-6 sm:grid-cols-3">
+
+    <a href="#" class="group">
+      <Ph class="media w-full aspect-[5/3] rounded-[12px]"
+          alt="Stack of winter tyres against a workshop wall, snow visible outside"
+          grid="5x3:dde,eee,eee,dde,dde,bbc,889,778,889,bbc,776,554,443,554,776"></Ph>
+      <h3 class="mt-4 text-[18px] font-semibold leading-snug tracking-[-.015em] group-hover:text-pine">Millal Eestis rehvid vahetada ja mis juhtub, kui hiljaks jääd</h3>
+      <p class="mt-2 text-[15px] text-soft leading-relaxed">Kuupäevad, trahvid ja üks asi, mida enamik unustab.</p>
+    </a>
+
+    <a href="#" class="group">
+      <Ph class="media w-full aspect-[5/3] rounded-[12px]"
+          alt="Open engine bay of a diesel car, oily components in shadow"
+          grid="5x3:998,887,998,887,998,776,554,665,554,776,665,443,554,443,665"></Ph>
+      <h3 class="mt-4 text-[18px] font-semibold leading-snug tracking-[-.015em] group-hover:text-pine">Kasutatud diisel 200 000 km peal: mida enne ostu vaadata</h3>
+      <p class="mt-2 text-[15px] text-soft leading-relaxed">Viis kohta, kus remondiarve tavaliselt peitub.</p>
+    </a>
+
+    <a href="#" class="group">
+      <Ph class="media w-full aspect-[5/3] rounded-[12px]"
+          alt="Empty cargo area of a white panel van seen through open rear doors"
+          grid="5x3:dde,eee,eee,eee,dde,ccc,ddd,eee,ddd,ccc,aa9,998,998,998,aa9"></Ph>
+      <h3 class="mt-4 text-[18px] font-semibold leading-snug tracking-[-.015em] group-hover:text-pine">Kaubik ettevõttele: liising, käibemaks ja tegelik kulu</h3>
+      <p class="mt-2 text-[15px] text-soft leading-relaxed">Arvutus ühe konkreetse Transiti näitel.</p>
+    </a>
+
+  </div>
+</section>
+
+<!-- ══════════ visit ══════════ -->
+<section id="visit" class="mt-20 border-t border-rule bg-card">
+  <div class="mx-auto max-w-[1180px] px-5 py-14 grid gap-10 lg:grid-cols-[1fr_1.2fr] items-start">
+
+    <div>
+      <h2 class="text-[32px] font-extrabold tracking-[-.03em]">Tule vaatama</h2>
+      <p class="mt-3 text-soft text-[16px] leading-relaxed max-w-[46ch]">
+        Plats on lahti ilma etteteatamiseta. Kui tahad kindlat autot proovida, helista enne — toome selle ette.
+      </p>
+
+      <dl class="mt-8 grid gap-5 text-[16px]">
+        <div>
+          <dt class="text-[13px] text-soft">Aadress</dt>
+          <dd class="mt-0.5">Tammsaare tee 118, 12918 Tallinn</dd>
+        </div>
+        <div>
+          <dt class="text-[13px] text-soft">Lahtiolek</dt>
+          <dd class="mt-0.5 font-mono spec">E–R 9–18 &nbsp; L 10–15 &nbsp; P suletud</dd>
+        </div>
+        <div>
+          <dt class="text-[13px] text-soft">Telefon</dt>
+          <dd class="mt-0.5 font-mono spec"><a href="tel:+3725112233" class="hover:text-pine">+372 511 2233</a></dd>
+        </div>
+        <div>
+          <dt class="text-[13px] text-soft">E-post</dt>
+          <dd class="mt-0.5"><a href="mailto:info@cubcar.ee" class="hover:text-pine">info@cubcar.ee</a></dd>
+        </div>
+      </dl>
+
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="#" class="inline-flex items-center h-11 px-5 rounded-[9px] bg-pine text-white font-medium hover:bg-pinedark">Kirjuta meile</a>
+        <a href="#" class="inline-flex items-center h-11 px-5 rounded-[9px] border border-rule font-medium hover:border-ink/40">Telegram</a>
+        <a href="#" class="inline-flex items-center h-11 px-5 rounded-[9px] border border-rule font-medium hover:border-ink/40">WhatsApp</a>
+      </div>
+    </div>
+
+    <Ph class="media w-full aspect-[16/9] rounded-[14px]"
+        alt="Overhead map view of the dealership location with roads and green blocks around it"
+        grid="10x4:dda,cc9,bb8,cc9,dda,cc9,bb8,cc9,dda,cc9,cc9,9a7,8b7,9a7,cc9,9a7,8b7,9a7,cc9,9a7,bb8,8b7,7a6,8b7,bb8,8b7,7a6,8b7,bb8,8b7,cc9,9a7,8b7,9a7,cc9,9a7,8b7,9a7,cc9,9a7"></Ph>
+
+  </div>
+</section>
+
+<!-- ══════════ footer ══════════ -->
+<footer class="bg-paper border-t border-rule">
+  <div class="mx-auto max-w-[1180px] px-5 py-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-4 text-[15px]">
+
+    <div>
+      <div class="flex items-center gap-2.5">
+        <span class="grid place-items-center w-8 h-8 rounded-[8px] bg-pine text-amber font-extrabold leading-none">C</span>
+        <span class="text-[18px] font-extrabold tracking-[-.03em]">CubCar</span>
+      </div>
+      <p class="mt-4 text-soft leading-relaxed">Sõiduautod, kaubikud ja ATV-d. Ostame, müüme, võtame vahetusse.</p>
+    </div>
+
+    <nav>
+      <h3 class="font-semibold">Sõidukid</h3>
+      <ul class="mt-3 grid gap-2 text-soft">
+        <li><a href="#stock" class="hover:text-ink">Sõiduautod</a></li>
+        <li><a href="#stock" class="hover:text-ink">Kaubikud</a></li>
+        <li><a href="#stock" class="hover:text-ink">ATV-d</a></li>
+      </ul>
+    </nav>
+
+    <nav>
+      <h3 class="font-semibold">Teenused</h3>
+      <ul class="mt-3 grid gap-2 text-soft">
+        <li><a href="#trade" class="hover:text-ink">Vahetus</a></li>
+        <li><a href="#trade" class="hover:text-ink">Komisjonimüük</a></li>
+        <li><a href="#journal" class="hover:text-ink">Blogi</a></li>
+      </ul>
+    </nav>
+
+    <div>
+      <h3 class="font-semibold">Rekvisiidid</h3>
+      <p class="mt-3 text-soft leading-relaxed spec">
+        CubCar OÜ<br>
+        Registrikood <span class="font-mono">16234567</span><br>
+        KMKR <span class="font-mono">EE102345678</span><br>
+        Tammsaare tee 118, Tallinn
+      </p>
+    </div>
+
+  </div>
+
+  <div class="border-t border-rule">
+    <div class="mx-auto max-w-[1180px] px-5 py-5 flex flex-wrap items-center justify-between gap-4 text-[14px] text-soft">
+      <span>© 2026 CubCar OÜ</span>
+      <div class="flex items-center gap-5">
+        <a href="#" class="hover:text-ink">Privaatsuspoliitika</a>
+        <a href="#" class="hover:text-ink">Küpsised</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  function paint(el) {
+    var spec = el.getAttribute('grid');
+    if (!spec) return;
+    var parts = spec.split(':');
+    var dims = parts[0].split('x');
+    var cols = parseInt(dims[0], 10);
+    var rows = parseInt(dims[1], 10);
+    var cells = parts[1].split(',');
+
+    var c = document.createElement('canvas');
+    c.width = cols;
+    c.height = rows;
+    var ctx = c.getContext('2d');
+
+    for (var i = 0; i < cols * rows; i++) {
+      var hex = (cells[i] || 'ccc').trim();
+      ctx.fillStyle = '#' + hex;
+      ctx.fillRect(i % cols, Math.floor(i / cols), 1, 1);
+    }
+
+    c.setAttribute('role', 'img');
+    c.setAttribute('aria-label', el.getAttribute('alt') || '');
+    el.appendChild(c);
+  }
+
+  document.querySelectorAll('Ph').forEach(paint);
+})();
+</script>
+
+</body>
+</html>
