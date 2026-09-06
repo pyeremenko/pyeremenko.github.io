@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>CubCar — sõiduautod, kaubikud ja ATV-d Tallinnas</title>
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<style type="text/tailwindcss">
+  @custom-variant dark (&:where(.dark, .dark *));
+
+  /* One token set. Light is the base; .dark overrides the values below it. */
+  @theme {
+    --color-bg:      oklch(0.985 0.003 85);
+    --color-surface: oklch(1 0 0);
+    --color-sunken:  oklch(0.962 0.005 85);
+    --color-fg:      oklch(0.225 0.030 265);
+    --color-dim:     oklch(0.515 0.021 265);
+    --color-line:    oklch(0.898 0.007 265);
+    --color-brand:   oklch(0.350 0.075 258);
+    --color-on-brand:oklch(0.985 0.003 85);
+    --color-flag:    oklch(0.680 0.115 62);
+    --color-on-flag: oklch(0.235 0.045 60);
+
+    --radius-plate: 0.25rem;
+    --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+
+  @layer base {
+    .dark {
+      --color-bg:      oklch(0.172 0.018 262);
+      --color-surface: oklch(0.218 0.020 262);
+      --color-sunken:  oklch(0.145 0.016 262);
+      --color-fg:      oklch(0.960 0.004 85);
+      --color-dim:     oklch(0.690 0.013 262);
+      --color-line:    oklch(0.312 0.018 262);
+      --color-brand:   oklch(0.740 0.088 252);
+      --color-on-brand:oklch(0.150 0.020 262);
+      --color-flag:    oklch(0.790 0.130 68);
+      --color-on-flag: oklch(0.210 0.045 60);
+    }
+
+    html { scroll-behavior: smooth; }
+    body { background: var(--color-bg); color: var(--color-fg); -webkit-font-smoothing: antialiased; }
+    :focus-visible { outline: 2px solid var(--color-flag); outline-offset: 2px; border-radius: 2px; }
+    .nums { font-variant-numeric: tabular-nums; }
+    select, input, textarea { color-scheme: light; }
+    .dark select, .dark input, .dark textarea { color-scheme: dark; }
+    .rail { scrollbar-width: none; }
+    .rail::-webkit-scrollbar { display: none; }
+
+    /* Ph — blurred canvas placeholder standing in for a photograph */
+    ph { display: block; position: relative; overflow: hidden; background: var(--color-sunken); }
+    ph > canvas { position: absolute; inset: 0; width: 100%; height: 100%; transform: scale(1.14); filter: blur(14px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body class="font-sans antialiased">
+
+<!-- ── Lucide icon sprite ─────────────────────────────────────────────── -->
+<svg width="0" height="0" class="hidden" aria-hidden="true">
+  <defs>
+    <g id="i-phone"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></g>
+    <g id="i-mail"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></g>
+    <g id="i-pin"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></g>
+    <g id="i-clock"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></g>
+    <g id="i-search"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></g>
+    <g id="i-chev"><path d="m6 9 6 6 6-6"/></g>
+    <g id="i-fuel"><path d="M3 22h12"/><path d="M4 9h10"/><path d="M14 22V4a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v18"/><path d="M14 13h2a2 2 0 0 1 2 2v2a2 2 0 0 0 2 2a2 2 0 0 0 2-2V9.83a2 2 0 0 0-.59-1.42L18 5"/></g>
+    <g id="i-gauge"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></g>
+    <g id="i-cal"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></g>
+    <g id="i-cog"><path d="M20 7h-9"/><path d="M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></g>
+    <g id="i-check"><path d="M20 6 9 17l-5-5"/></g>
+    <g id="i-shield"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></g>
+    <g id="i-camera"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></g>
+    <g id="i-insta"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><path d="M17.5 6.5h.01"/></g>
+    <g id="i-play"><path d="m6 3 14 9-14 9Z"/></g>
+    <g id="i-tag"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5"/></g>
+    <g id="i-menu"><path d="M4 6h16M4 12h16M4 18h16"/></g>
+    <g id="i-sun"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></g>
+    <g id="i-moon"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></g>
+    <g id="i-users"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/></g>
+    <g id="i-star"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></g>
+  </defs>
+</svg>
+
+<!-- ── Header ─────────────────────────────────────────────────────────── -->
+<header class="sticky top-0 z-40 border-b border-line bg-bg/88 backdrop-blur">
+  <div class="mx-auto flex h-16 max-w-6xl items-center gap-6 px-5">
+
+    <a href="#" class="flex items-baseline gap-2">
+      <span class="text-[19px] font-bold tracking-[-0.02em]">CubCar</span>
+      <span class="hidden text-[12px] text-dim sm:inline">Tallinn</span>
+    </a>
+
+    <nav class="ml-4 hidden items-center gap-5 text-sm lg:flex">
+      <a class="text-dim transition-colors hover:text-fg" href="#nimekiri">Sõidukid</a>
+      <a class="text-dim transition-colors hover:text-fg" href="#teenused">Teenused</a>
+      <a class="text-dim transition-colors hover:text-fg" href="#meist">Meist</a>
+      <a class="text-dim transition-colors hover:text-fg" href="#blogi">Blogi</a>
+      <a class="text-dim transition-colors hover:text-fg" href="#kontakt">Kontakt</a>
+    </nav>
+
+    <div class="ml-auto flex items-center gap-2">
+      <div class="hidden items-center rounded-plate border border-line p-0.5 text-[13px] sm:flex">
+        <button class="rounded-[2px] bg-sunken px-2 py-1 font-medium">ET</button>
+        <button class="rounded-[2px] px-2 py-1 text-dim transition-colors hover:text-fg">RU</button>
+        <button class="rounded-[2px] px-2 py-1 text-dim transition-colors hover:text-fg">EN</button>
+        <button class="rounded-[2px] px-2 py-1 text-dim transition-colors hover:text-fg">FI</button>
+      </div>
+
+      <button id="theme-toggle" class="grid size-9 place-items-center rounded-plate border border-line transition-colors hover:bg-sunken" aria-label="Vaheta teemat">
+        <svg class="size-4 dark:hidden" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><use href="#i-moon"/></svg>
+        <svg class="hidden size-4 dark:block" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><use href="#i-sun"/></svg>
+      </button>
+
+      <a href="tel:+3725000000" class="inline-flex h-9 items-center gap-2 rounded-plate bg-brand px-3.5 text-sm font-medium text-on-brand transition-opacity hover:opacity-90">
+        <svg class="size-4" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><use href="#i-phone"/></svg>
+        <span class="nums hidden sm:inline">+372 5000 0000</span>
+        <span class="sm:hidden">Helista</span>
+      </a>
+
+      <button class="grid size-9 place-items-center rounded-plate border border-line lg:hidden" aria-label="Menüü">
+        <svg class="size-4" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" viewBox="0 0 24 24"><use href="#i-menu"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ── Hero: tall, with the credibility bar built into it ─────────────── -->
+<section class="relative min-h-[clamp(560px,78vh,760px)]">
+  <ph class="absolute inset-0" alt="Wide overcast photograph of the CubCar forecourt in Tallinn, a row of clean used cars angled towards the camera, low Nordic light and a pine treeline behind"
+      grid="10x6:cdd,cde,dde,dde,dee,dee,dde,cde,cdd,ccd,dde,dee,eef,eef,eef,eef,dee,dde,ccd,ccd,998,887,776,776,887,998,aa9,998,887,887,776,554,443,554,665,554,443,554,665,776,554,332,221,332,443,332,221,332,443,554,887,776,665,665,776,887,998,887,776,776"></ph>
+  <div class="absolute inset-0 bg-gradient-to-b from-black/45 via-black/55 to-black/80 dark:from-black/55 dark:via-black/70 dark:to-black/90"></div>
+
+  <div class="relative mx-auto flex min-h-[clamp(560px,78vh,760px)] max-w-6xl flex-col px-5">
+
+    <div class="flex flex-1 items-center py-20">
+      <div>
+        <p class="text-[13px] font-medium tracking-wide text-flag">Tegutseme Tallinnas alates 2015. aastast</p>
+        <h1 class="mt-4 max-w-3xl text-[clamp(2.25rem,5.6vw,4rem)] font-bold leading-[1.02] tracking-[-0.035em] text-white">
+          Auto, mille ajalugu on kirjas
+        </h1>
+        <p class="mt-5 max-w-lg text-[16px] leading-relaxed text-white/75">
+          Sõiduautod, kaubikud ja ATV-d. Iga masin käib enne platsile jõudmist meie mehaaniku käest läbi ja teadaolevad vead on kuulutuses kirjas.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="#nimekiri" class="inline-flex h-12 items-center rounded-plate bg-flag px-6 text-[15px] font-semibold text-on-flag transition-transform hover:-translate-y-px">Vaata 38 sõidukit</a>
+          <a href="#teenused" class="inline-flex h-12 items-center rounded-plate border border-white/25 bg-white/10 px-6 text-[15px] font-medium text-white backdrop-blur transition-colors hover:bg-white/20">Hinda minu autot</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- credibility bar, inside the hero rather than under it -->
+    <div class="grid grid-cols-2 gap-px border-t border-white/15 py-8 sm:grid-cols-4">
+      <div class="px-1">
+        <div class="nums text-[28px] font-bold leading-none tracking-tight text-white">11</div>
+        <div class="mt-2 text-[13px] leading-snug text-white/60">aastat samal platsil</div>
+      </div>
+      <div class="border-l border-white/15 px-5">
+        <div class="nums text-[28px] font-bold leading-none tracking-tight text-white">1400+</div>
+        <div class="mt-2 text-[13px] leading-snug text-white/60">müüdud sõidukit</div>
+      </div>
+      <div class="border-t border-white/15 px-1 pt-6 sm:border-l sm:border-t-0 sm:pt-0">
+        <div class="nums flex items-center gap-1.5 text-[28px] font-bold leading-none tracking-tight text-white">
+          4,8
+          <svg class="size-4 text-flag" fill="currentColor" viewBox="0 0 24 24"><use href="#i-star"/></svg>
+        </div>
+        <div class="mt-2 text-[13px] leading-snug text-white/60">Google, 260 hinnangut</div>
+      </div>
+      <div class="border-l border-t border-white/15 px-5 pt-6 sm:border-t-0 sm:pt-0">
+        <div class="nums text-[28px] font-bold leading-none tracking-tight text-white">12 kuud</div>
+        <div class="mt-2 text-[13px] leading-snug text-white/60">garantii valitud autodele</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Featured vehicle ───────────────────────────────────────────────── -->
+<section class="mx-auto max-w-6xl px-5 pt-14">
+  <div class="grid overflow-hidden rounded-plate border border-line bg-surface lg:grid-cols-[1.15fr_1fr]">
+    <div class="relative">
+      <ph class="h-full min-h-[280px]" alt="Dark grey Volvo V60 estate photographed three-quarter front at dusk, forecourt lights just coming on"
+          grid="8x6:bcd,cde,dde,dde,cde,bcd,bcd,acc,cde,dde,eef,eef,dde,cde,bcd,bcd,887,776,665,665,776,887,998,998,665,443,332,332,443,665,776,665,443,221,110,110,221,443,554,443,776,665,665,776,887,887,776,665"></ph>
+      <span class="absolute left-4 top-4 rounded-plate bg-flag px-2.5 py-1 text-[12px] font-semibold text-on-flag">Nädala valik</span>
+    </div>
+
+    <div class="p-6 sm:p-8">
+      <h2 class="text-[26px] font-semibold leading-tight tracking-tight">Volvo V60 D4 Momentum</h2>
+      <p class="mt-2.5 max-w-md text-[15px] leading-relaxed text-dim">
+        Üks omanik, hooldusraamat täidetud, viimane suurhooldus tehtud 8 000 km tagasi. Talverehvid komplektis.
+      </p>
+
+      <dl class="mt-6 grid grid-cols-2 gap-x-6 border-y border-line">
+        <div class="flex items-center justify-between border-b border-line py-2.5 text-[14px]">
+          <dt class="text-dim">Aasta</dt><dd class="nums font-medium">2019</dd>
+        </div>
+        <div class="flex items-center justify-between border-b border-line py-2.5 text-[14px]">
+          <dt class="text-dim">Läbisõit</dt><dd class="nums font-medium">134 200 km</dd>
+        </div>
+        <div class="flex items-center justify-between py-2.5 text-[14px] sm:border-b sm:border-line">
+          <dt class="text-dim">Kütus</dt><dd class="font-medium">Diisel</dd>
+        </div>
+        <div class="flex items-center justify-between py-2.5 text-[14px] sm:border-b sm:border-line">
+          <dt class="text-dim">Käigukast</dt><dd class="font-medium">Automaat</dd>
+        </div>
+      </dl>
+
+      <div class="mt-6 flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <div class="nums text-[32px] font-bold leading-none tracking-tight">21 900 €</div>
+          <div class="nums mt-2 text-[13px] text-dim">liisinguga alates 314 €/kuus</div>
+        </div>
+        <div class="flex gap-2">
+          <a href="#" class="inline-flex h-10 items-center rounded-plate bg-brand px-4 text-sm font-medium text-on-brand transition-opacity hover:opacity-90">Vaata lähemalt</a>
+          <a href="#" class="inline-flex h-10 items-center rounded-plate border border-line px-4 text-sm font-medium transition-colors hover:bg-sunken">Broneeri proovisõit</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Inventory: sticky filter rail + index rows ─────────────────────── -->
+<section id="nimekiri" class="mx-auto max-w-6xl px-5 pt-16">
+  <div class="flex items-end justify-between gap-4 border-b border-line pb-4">
+    <h2 class="text-[26px] font-semibold tracking-tight">Praegu platsil</h2>
+    <span class="nums text-[13px] text-dim">38 sõidukit, uuendatud täna</span>
+  </div>
+
+  <div class="grid gap-6 pt-6 lg:grid-cols-[220px_1fr]">
+
+    <aside class="lg:sticky lg:top-24 lg:self-start">
+      <div class="grid gap-3">
+        <label class="grid gap-1.5">
+          <span class="text-[13px] font-medium">Mark</span>
+          <div class="relative">
+            <select class="h-9 w-full appearance-none rounded-plate border border-line bg-surface px-2.5 pr-8 text-[13px]">
+              <option>Kõik margid</option><option>Volkswagen</option><option>Toyota</option><option>Škoda</option><option>Volvo</option><option>Ford</option><option>CFMoto</option>
+            </select>
+            <svg class="pointer-events-none absolute right-2.5 top-2.5 size-4 text-dim" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><use href="#i-chev"/></svg>
+          </div>
+        </label>
+        <label class="grid gap-1.5">
+          <span class="text-[13px] font-medium">Kütus</span>
+          <div class="relative">
+            <select class="h-9 w-full appearance-none rounded-plate border border-line bg-surface px-2.5 pr-8 text-[13px]">
+              <option>Kõik kütused</option><option>Diisel</option><option>Bensiin</option><option>Hübriid</option><option>Elekter</option>
+            </select>
+            <svg class="pointer-events-none absolute right-2.5 top-2.5 size-4 text-dim" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><use href="#i-chev"/></svg>
+          </div>
+        </label>
+        <label class="grid gap-1.5">
+          <span class="text-[13px] font-medium">Käigukast</span>
+          <div class="relative">
+            <select class="h-9 w-full appearance-none rounded-plate border border-line bg-surface px-2.5 pr-8 text-[13px]">
+              <option>Kõik käigukastid</option><option>Automaat</option><option>Manuaal</option>
+            </select>
+            <svg class="pointer-events-none absolute right-2.5 top-2.5 size-4 text-dim" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><use href="#i-chev"/></svg>
+          </div>
+        </label>
+        <label class="grid gap-1.5">
+          <span class="text-[13px] font-medium">Vedu</span>
+          <div class="relative">
+            <select class="h-9 w-full appearance-none rounded-plate border border-line bg-surface px-2.5 pr-8 text-[13px]">
+              <option>Kõik veoskeemid</option><option>Esivedu</option><option>Tagavedu</option><option>Nelikvedu</option>
+            </select>
+            <svg class="pointer-events-none absolute right-2.5 top-2.5 size-4 text-dim" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><use href="#i-chev"/></svg>
+          </div>
+        </label>
+
+        <div class="mt-1 border-t border-line pt-3">
+          <div class="text-[13px] font-medium">Tüüp</div>
+          <div class="mt-2 flex flex-wrap gap-1.5">
+            <button class="rounded-plate border border-line bg-sunken px-2.5 py-1 text-[13px]">Sõiduauto <span class="nums text-dim">24</span></button>
+            <button class="rounded-plate border border-line px-2.5 py-1 text-[13px]">Kaubik <span class="nums text-dim">8</span></button>
+            <button class="rounded-plate border border-line px-2.5 py-1 text-[13px]">ATV <span class="nums text-dim">6</span></button>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <div class="divide-y divide-line border-y border-line">
+
+      <a href="#" class="grid grid-cols-[110px_1fr] items-center gap-4 py-4 transition-colors hover:bg-sunken sm:grid-cols-[140px_1fr_auto] sm:gap-5">
+        <ph class="h-[74px] rounded-plate sm:h-[92px]" alt="Dark blue Škoda Octavia estate on wet tarmac, three-quarter front view"
+            grid="6x4:cde,dde,eef,eef,dde,cde,445,334,223,223,334,445,334,223,112,112,223,334,998,887,776,776,887,998"></ph>
+        <div class="min-w-0">
+          <div class="flex flex-wrap items-center gap-2">
+            <h3 class="text-[15px] font-semibold">Škoda Octavia Combi 2.0 TDI</h3>
+            <span class="rounded-[2px] bg-flag px-1.5 py-0.5 text-[11px] font-semibold text-on-flag">Uus</span>
+          </div>
+          <div class="nums mt-1.5 flex flex-wrap gap-x-3 gap-y-1 text-[13px] text-dim">
+            <span>2019</span><span>·</span><span>168 000 km</span><span>·</span><span>Diisel</span><span>·</span><span>Automaat</span>
+          </div>
+        </div>
+        <div class="col-span-2 flex items-baseline justify-between gap-3 sm:col-span-1 sm:block sm:text-right">
+          <div class="nums text-[19px] font-bold tracking-tight">14 900 €</div>
+          <div class="nums mt-1 text-[12px] text-dim">alates 214 €/kuus</div>
+        </div>
+      </a>
+
+      <a href="#" class="grid grid-cols-[110px_1fr] items-center gap-4 py-4 transition-colors hover:bg-sunken sm:grid-cols-[140px_1fr_auto] sm:gap-5">
+        <ph class="h-[74px] rounded-plate sm:h-[92px]" alt="White Ford Transit Custom panel van, side view in an industrial yard"
+            grid="6x4:dee,eef,eef,eef,dee,dde,eee,fff,fff,eee,ddd,ccc,ccc,bbb,aaa,999,888,999,aa9,998,887,887,998,aa9"></ph>
+        <div class="min-w-0">
+          <h3 class="text-[15px] font-semibold">Ford Transit Custom 2.0 EcoBlue</h3>
+          <div class="nums mt-1.5 flex flex-wrap gap-x-3 gap-y-1 text-[13px] text-dim">
+            <span>2020</span><span>·</span><span>142 500 km</span><span>·</span><span>Diisel</span><span>·</span><span>Manuaal</span>
+          </div>
+        </div>
+        <div class="col-span-2 flex items-baseline justify-between gap-3 sm:col-span-1 sm:block sm:text-right">
+          <div class="nums text-[19px] font-bold tracking-tight">18 400 €</div>
+          <div class="nums mt-1 text-[12px] text-dim">alates 264 €/kuus</div>
+        </div>
+      </a>
+
+      <a href="#" class="grid grid-cols-[110px_1fr] items-center gap-4 py-4 transition-colors hover:bg-sunken sm:grid-cols-[140px_1fr_auto] sm:gap-5">
+        <ph class="h-[74px] rounded-plate sm:h-[92px]" alt="Red Toyota Yaris hatchback in front of a pale concrete wall"
+            grid="6x4:cde,dde,eef,eef,dde,cde,a33,b44,c55,c55,b44,a33,722,833,944,944,833,722,998,887,776,776,887,998"></ph>
+        <div class="min-w-0">
+          <h3 class="text-[15px] font-semibold">Toyota Yaris 1.5 Hybrid</h3>
+          <div class="nums mt-1.5 flex flex-wrap gap-x-3 gap-y-1 text-[13px] text-dim">
+            <span>2021</span><span>·</span><span>61 300 km</span><span>·</span><span>Hübriid</span><span>·</span><span>Automaat</span>
+          </div>
+        </div>
+        <div class="col-span-2 flex items-baseline justify-between gap-3 sm:col-span-1 sm:block sm:text-right">
+          <div class="nums text-[19px] font-bold tracking-tight">16 750 €</div>
+          <div class="nums mt-1 text-[12px] text-dim">alates 240 €/kuus</div>
+        </div>
+      </a>
+
+      <a href="#" class="grid grid-cols-[110px_1fr] items-center gap-4 py-4 transition-colors hover:bg-sunken sm:grid-cols-[140px_1fr_auto] sm:gap-5">
+        <ph class="h-[74px] rounded-plate sm:h-[92px]" alt="Silver Volkswagen Tiguan SUV on gravel in low winter sun"
+            grid="6x4:cde,dde,eef,eef,dde,cde,bbb,ccc,ddd,ddd,ccc,bbb,776,665,554,554,665,776,998,887,776,776,887,998"></ph>
+        <div class="min-w-0">
+          <div class="flex flex-wrap items-center gap-2">
+            <h3 class="text-[15px] font-semibold">Volkswagen Tiguan 2.0 TDI 4Motion</h3>
+            <span class="rounded-[2px] border border-line px-1.5 py-0.5 text-[11px] font-semibold text-dim">Broneeritud</span>
+          </div>
+          <div class="nums mt-1.5 flex flex-wrap gap-x-3 gap-y-1 text-[13px] text-dim">
+            <span>2018</span><span>·</span><span>195 800 km</span><span>·</span><span>Diisel</span><span>·</span><span>Nelikvedu</span>
+          </div>
+        </div>
+        <div class="col-span-2 flex items-baseline justify-between gap-3 sm:col-span-1 sm:block sm:text-right">
+          <div class="nums text-[19px] font-bold tracking-tight">17 200 €</div>
+          <div class="nums mt-1 text-[12px] text-dim">alates 247 €/kuus</div>
+        </div>
+      </a>
+
+      <a href="#" class="grid grid-cols-[110px_1fr] items-center gap-4 py-4 transition-colors hover:bg-sunken sm:grid-cols-[140px_1fr_auto] sm:gap-5">
+        <ph class="h-[74px] rounded-plate sm:h-[92px]" alt="Green CFMoto quad bike on grass beside a forest track"
+            grid="6x4:bcd,cde,cde,cde,bcd,bcd,8a7,9b8,aca,aca,9b8,8a7,353,464,575,575,464,353,875,764,653,653,764,875"></ph>
+        <div class="min-w-0">
+          <h3 class="text-[15px] font-semibold">CFMoto CForce 850 XC</h3>
+          <div class="nums mt-1.5 flex flex-wrap gap-x-3 gap-y-1 text-[13px] text-dim">
+            <span>2022</span><span>·</span><span>3 200 km</span><span>·</span><span>Bensiin</span><span>·</span><span>Nelikvedu</span>
+          </div>
+        </div>
+        <div class="col-span-2 flex items-baseline justify-between gap-3 sm:col-span-1 sm:block sm:text-right">
+          <div class="nums text-[19px] font-bold tracking-tight">8 490 €</div>
+          <div class="nums mt-1 text-[12px] text-dim">alates 122 €/kuus</div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <div class="pt-6 text-center lg:pl-[244px]">
+    <a href="#" class="inline-flex h-10 items-center rounded-plate border border-line px-5 text-sm font-medium transition-colors hover:bg-sunken">Näita kõiki 38 sõidukit</a>
+  </div>
+</section>
+
+<!-- ── Services ───────────────────────────────────────────────────────── -->
+<section id="teenused" class="mt-16 border-y border-line bg-sunken py-14">
+  <div class="mx-auto max-w-6xl px-5">
+    <h2 class="text-[26px] font-semibold tracking-tight">Kolm viisi, kuidas saame aidata</h2>
+
+    <div class="mt-6 grid gap-4 sm:grid-cols-3">
+      <div class="overflow-hidden rounded-plate border border-line bg-surface">
+        <ph class="h-32" alt="Car keys changing hands across a desk, warm indoor light"
+            grid="6x4:dcb,edc,fed,fed,edc,dcb,c98,b87,a76,a76,b87,c98,eca,dba,ca9,ca9,dba,eca,765,654,543,543,654,765"></ph>
+        <div class="p-5">
+          <h3 class="text-[17px] font-semibold tracking-tight">Vahetus</h3>
+          <p class="mt-2 text-[14px] leading-relaxed text-dim">Toome su vana auto uue vastu. Saada paar pilti — vastame hinnaga sama päeva jooksul.</p>
+          <a href="#" class="mt-4 inline-flex h-9 items-center rounded-plate bg-brand px-3.5 text-[13px] font-medium text-on-brand transition-opacity hover:opacity-90">Paku oma autot</a>
+        </div>
+      </div>
+
+      <div class="overflow-hidden rounded-plate border border-line bg-surface">
+        <ph class="h-32" alt="Row of cars parked in a line on a dealership forecourt seen from a low angle"
+            grid="6x4:cde,dde,eef,eef,dde,cde,998,887,776,776,887,998,776,665,554,554,665,776,998,887,776,776,887,998"></ph>
+        <div class="p-5">
+          <h3 class="text-[17px] font-semibold tracking-tight">Komisjonimüük</h3>
+          <p class="mt-2 text-[14px] leading-relaxed text-dim">Sinu auto seisab meie platsil. Meie teeme pildid, kuulutused ja suhtleme ostjatega. Tasu alles pärast müüki.</p>
+          <a href="#" class="mt-4 inline-flex h-9 items-center rounded-plate border border-line px-3.5 text-[13px] font-medium transition-colors hover:bg-sunken">Küsi tingimusi</a>
+        </div>
+      </div>
+
+      <div class="overflow-hidden rounded-plate border border-line bg-surface">
+        <ph class="h-32" alt="Paperwork and a pen on a desk beside a set of car keys"
+            grid="6x4:eee,eef,fff,fff,eef,eee,ddd,ccc,bbb,bbb,ccc,ddd,cba,ba9,a98,a98,ba9,cba,887,776,665,665,776,887"></ph>
+        <div class="p-5">
+          <h3 class="text-[17px] font-semibold tracking-tight">Liising ja garantii</h3>
+          <p class="mt-2 text-[14px] leading-relaxed text-dim">Vormistame liisingu kohapeal. Valitud autodele anname 12 kuu garantii.</p>
+          <a href="#" class="mt-4 inline-flex h-9 items-center rounded-plate border border-line px-3.5 text-[13px] font-medium transition-colors hover:bg-sunken">Loe tingimusi</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Social rail: vertical tiles, matching how the content is shot ──── -->
+<section class="mx-auto max-w-6xl px-5 py-14">
+  <div class="flex flex-wrap items-end justify-between gap-4">
+    <div>
+      <h2 class="text-[26px] font-semibold tracking-tight">Vaata, mis platsil toimub</h2>
+      <p class="mt-1.5 text-[15px] text-dim">Iga masin jõuab ka Auto24-sse, Instagrami ja TikTokki.</p>
+    </div>
+    <div class="flex gap-2">
+      <a href="#" class="inline-flex h-9 items-center gap-2 rounded-plate border border-line px-3 text-sm font-medium transition-colors hover:bg-sunken">
+        <svg class="size-4" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><use href="#i-tag"/></svg>Auto24
+      </a>
+      <a href="#" class="inline-flex h-9 items-center gap-2 rounded-plate border border-line px-3 text-sm font-medium transition-colors hover:bg-sunken">
+        <svg class="size-4" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><use href="#i-insta"/></svg>Instagram
+      </a>
+      <a href="#" class="inline-flex h-9 items-center gap-2 rounded-plate border border-line px-3 text-sm font-medium transition-colors hover:bg-sunken">
+        <svg class="size-3.5" fill="currentColor" viewBox="0 0 24 24"><use href="#i-play"/></svg>TikTok
+      </a>
+    </div>
+  </div>
+
+  <div class="rail mt-6 flex gap-3 overflow-x-auto pb-2">
+    <a href="#" class="relative w-[170px] shrink-0 overflow-hidden rounded-plate sm:w-[196px]">
+      <ph class="aspect-[9/16]" alt="Vertical video still of a diesel engine bay under a work lamp, hands pointing at a worn belt"
+          grid="4x7:776,665,554,665,554,443,332,443,998,887,776,887,665,554,443,554,443,332,221,332,554,443,332,443,332,221,110,221"></ph>
+      <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-transparent"></div>
+      <div class="absolute bottom-3 left-3 right-3">
+        <div class="text-[13px] font-medium leading-snug text-white">Mis on selle mootoriga tegelikult juhtunud</div>
+        <div class="nums mt-1 text-[12px] text-white/60">TikTok · 41 tuh vaatamist</div>
+      </div>
+    </a>
+
+    <a href="#" class="relative w-[170px] shrink-0 overflow-hidden rounded-plate sm:w-[196px]">
+      <ph class="aspect-[9/16]" alt="Vertical shot from a car window on a coastal road at dusk, sea on the horizon"
+          grid="4x7:8ac,7ab,69a,7ab,9bd,8ac,7ab,8ac,dda,cc9,bb8,cc9,887,776,665,776,776,665,554,665,665,554,443,554,554,443,332,443"></ph>
+      <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-transparent"></div>
+      <div class="absolute bottom-3 left-3 right-3">
+        <div class="text-[13px] font-medium leading-snug text-white">Nädalavahetuse sõit Peipsi äärde</div>
+        <div class="nums mt-1 text-[12px] text-white/60">Instagram · 8 200 vaatamist</div>
+      </div>
+    </a>
+
+    <a href="#" class="relative w-[170px] shrink-0 overflow-hidden rounded-plate sm:w-[196px]">
+      <ph class="aspect-[9/16]" alt="Vertical action shot of an orange quad bike throwing mud on a forest trail"
+          grid="4x7:9a8,897,786,897,754,643,532,643,d83,e94,fa5,e94,654,543,432,543,543,432,321,432,432,321,210,321,332,221,221,221"></ph>
+      <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-transparent"></div>
+      <div class="absolute bottom-3 left-3 right-3">
+        <div class="text-[13px] font-medium leading-snug text-white">ATV soos — mis juhtub, kui kinni jääd</div>
+        <div class="nums mt-1 text-[12px] text-white/60">TikTok · 127 tuh vaatamist</div>
+      </div>
+    </a>
+
+    <a href="#" class="relative w-[170px] shrink-0 overflow-hidden rounded-plate sm:w-[196px]">
+      <ph class="aspect-[9/16]" alt="Vertical before-and-after of a car bonnet being polished, reflections sharpening"
+          grid="4x7:eef,dde,ccd,dde,ccd,bbc,aab,bbc,99a,889,778,889,778,667,556,667,667,556,445,556,556,445,334,445,445,334,223,334"></ph>
+      <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-transparent"></div>
+      <div class="absolute bottom-3 left-3 right-3">
+        <div class="text-[13px] font-medium leading-snug text-white">Enne ja pärast: 2014. aasta Passat</div>
+        <div class="nums mt-1 text-[12px] text-white/60">Instagram · 12 400 vaatamist</div>
+      </div>
+    </a>
+
+    <a href="#" class="relative w-[170px] shrink-0 overflow-hidden rounded-plate sm:w-[196px]">
+      <ph class="aspect-[9/16]" alt="Vertical shot inside an empty white van cargo bay, measuring tape stretched across the floor"
+          grid="4x7:ddd,eee,fff,eee,ccc,ddd,eee,ddd,bbb,ccc,ddd,ccc,998,aa9,bba,aa9,887,998,aa9,998,776,887,998,887,665,776,887,776"></ph>
+      <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-transparent"></div>
+      <div class="absolute bottom-3 left-3 right-3">
+        <div class="text-[13px] font-medium leading-snug text-white">Kui palju sinna kaubikusse tegelikult mahub</div>
+        <div class="nums mt-1 text-[12px] text-white/60">TikTok · 23 tuh vaatamist</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- ── About ──────────────────────────────────────────────────────────── -->
+<section id="meist" class="border-y border-line bg-sunken py-14">
+  <div class="mx-auto grid max-w-6xl items-center gap-10 px-5 lg:grid-cols-2">
+    <ph class="h-64 rounded-plate lg:h-80" alt="Two CubCar staff members talking beside a car inside the showroom, natural daylight from a large window"
+        grid="8x5:eee,eef,fff,fff,eef,eee,dde,dde,ddd,eee,fff,fff,eee,ddd,ccc,ccc,cba,dcb,ba9,a98,cba,dcb,ccc,bbb,998,887,776,776,887,998,aa9,998,ccc,bbb,aaa,aaa,bbb,ccc,ddd,ddd"></ph>
+
+    <div>
+      <h2 class="text-[26px] font-semibold tracking-tight">Sama plats, samad inimesed, üksteist aastat</h2>
+      <p class="mt-4 text-[15px] leading-relaxed text-dim">
+        Alustasime 2015. aastal kolme autoga Lasnamäel. Täna on platsil kolmkümmend kuni nelikümmend masinat ja meeskonnas viis inimest — sama mehaanik, kes esimesed autod üle vaatas, teeb seda siiani.
+      </p>
+      <p class="mt-3 text-[15px] leading-relaxed text-dim">
+        Me ei osta kokku kõike, mis odav. Kui auto ei kõlba, ütleme seda ka siis, kui see on meie enda plats.
+      </p>
+
+      <div class="mt-7 grid gap-4 sm:grid-cols-3">
+        <div class="flex gap-2.5">
+          <svg class="mt-0.5 size-4 shrink-0 text-brand" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><use href="#i-shield"/></svg>
+          <div class="text-[14px] leading-snug">Ülevaatus enne müüki</div>
+        </div>
+        <div class="flex gap-2.5">
+          <svg class="mt-0.5 size-4 shrink-0 text-brand" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><use href="#i-check"/></svg>
+          <div class="text-[14px] leading-snug">Vead kuulutuses kirjas</div>
+        </div>
+        <div class="flex gap-2.5">
+          <svg class="mt-0.5 size-4 shrink-0 text-brand" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><use href="#i-users"/></svg>
+          <div class="text-[14px] leading-snug">Räägime eesti, vene ja inglise keeles</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Blog ───────────────────────────────────────────────────────────── -->
+<section id="blogi" class="mx-auto max-w-6xl px-5 py-14">
+  <div class="flex items-end justify-between gap-4 border-b border-line pb-4">
+    <h2 class="text-[26px] font-semibold tracking-tight">Blogist</h2>
+    <a href="#" class="text-sm font-medium text-brand underline decoration-line underline-offset-4 hover:decoration-current">Kõik lood</a>
+  </div>
+
+  <div class="grid gap-6 pt-6 lg:grid-cols-[1.4fr_1fr]">
+    <a href="#" class="group">
+      <ph class="h-56 rounded-plate sm:h-72" alt="Snow-covered Estonian road at dusk with fresh tyre tracks leading away from the camera"
+          grid="8x5:eef,eef,dde,dde,eef,eef,eef,dde,ddd,eee,fff,fff,eee,ddd,ccc,ccc,bbc,ccd,dde,dde,ccd,bbc,aab,aab,889,778,667,667,778,889,99a,99a,eee,fff,fff,eee,ddd,ccc,ddd,eee"></ph>
+      <div class="nums mt-4 text-[13px] text-dim">14. oktoober 2026</div>
+      <h3 class="mt-1.5 max-w-[38ch] text-[21px] font-semibold leading-tight tracking-tight group-hover:underline group-hover:decoration-line group-hover:underline-offset-4">Millal Eestis talverehvid alla panna ja millal see tegelikult mõttekas on</h3>
+      <p class="mt-2 max-w-[52ch] text-[15px] leading-relaxed text-dim">Seadus ütleb ühte, ilm teist. Vaatame, mida päris temperatuurid Tallinnas viimase viie aasta jooksul näitasid.</p>
+    </a>
+
+    <div class="grid content-start gap-5">
+      <a href="#" class="group grid grid-cols-[110px_1fr] gap-4">
+        <ph class="h-[74px] rounded-plate" alt="German autobahn seen through a windscreen with cars in motion blur"
+            grid="6x4:cde,dde,dde,cde,bcd,bcd,9ab,8a9,798,8a9,9ab,899,887,776,665,776,887,998,bba,aa9,998,aa9,bba,ccb"></ph>
+        <div>
+          <div class="nums text-[13px] text-dim">2. oktoober 2026</div>
+          <h3 class="mt-1 text-[15px] font-semibold leading-snug group-hover:underline group-hover:decoration-line group-hover:underline-offset-4">Auto toomine Saksamaalt: mis maksab tegelikult peale hinnasildi</h3>
+        </div>
+      </a>
+      <a href="#" class="group grid grid-cols-[110px_1fr] gap-4 border-t border-line pt-5">
+        <ph class="h-[74px] rounded-plate" alt="Quad bike on a workshop lift with tools laid out on a bench nearby"
+            grid="6x4:ddc,ccb,bba,ccb,ddc,ccb,998,887,776,887,998,887,b95,ca6,db7,ca6,b95,a84,665,554,443,554,665,554"></ph>
+        <div>
+          <div class="nums text-[13px] text-dim">21. september 2026</div>
+          <h3 class="mt-1 text-[15px] font-semibold leading-snug group-hover:underline group-hover:decoration-line group-hover:underline-offset-4">ATV hooldus enne hooaega: viis asja, mida ise ära teha</h3>
+        </div>
+      </a>
+      <a href="#" class="group grid grid-cols-[110px_1fr] gap-4 border-t border-line pt-5">
+        <ph class="h-[74px] rounded-plate" alt="Close-up of a used car's service book being flipped through"
+            grid="6x4:eee,eef,fff,eef,eee,ddd,ddd,ccc,bbb,ccc,ddd,ccc,cba,ba9,a98,ba9,cba,ba9,887,776,665,776,887,776"></ph>
+        <div>
+          <div class="nums text-[13px] text-dim">9. september 2026</div>
+          <h3 class="mt-1 text-[15px] font-semibold leading-snug group-hover:underline group-hover:decoration-line group-hover:underline-offset-4">Kuus asja, mida kasutatud auto juures alati ise kontrollida</h3>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Contact: map band with an overlapping card ─────────────────────── -->
+<section id="kontakt" class="relative border-t border-line">
+  <ph class="h-[420px] w-full" alt="Street map of Lasnamäe, Tallinn showing the CubCar forecourt on Peterburi tee with a marker pin"
+      grid="14x5:ddd,ccc,ddd,ddd,ccc,ddd,ddd,ccc,ddd,ddd,ccc,ddd,ddd,ccc,ccc,ccc,bbb,ccc,ccc,ccc,bbb,ccc,ccc,ccc,bbb,ccc,ccc,ccc,aaa,aaa,aaa,aaa,aaa,aaa,aaa,aaa,aaa,aaa,aaa,aaa,aaa,aaa,ccc,bbb,ccc,ccc,bbb,ccc,ccc,bbb,ccc,ccc,bbb,ccc,ccc,bbb,9ab,8ab,7ab,8ab,9ab,ccc,ccc,bbb,ccc,ccc,ccc,bbb,ccc,ccc"></ph>
+
+  <div class="absolute inset-0">
+    <div class="mx-auto flex h-full max-w-6xl items-center px-5">
+      <div class="w-full max-w-md rounded-plate border border-line bg-surface p-6 shadow-[0_10px_40px_rgba(0,0,0,.18)] sm:p-7">
+        <h2 class="text-[22px] font-semibold tracking-tight">Tule vaatama</h2>
+        <p class="mt-2 text-[14px] leading-relaxed text-dim">Plats on avatud ka ilma etteteatamiseta. Proovisõiduks anna päev ette teada.</p>
+
+        <dl class="mt-5 divide-y divide-line border-y border-line">
+          <div class="flex gap-3 py-3">
+            <svg class="mt-0.5 size-4 shrink-0 text-dim" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><use href="#i-pin"/></svg>
+            <dd class="text-[14px]">Peterburi tee 46, 11415 Tallinn</dd>
+          </div>
+          <div class="flex gap-3 py-3">
+            <svg class="mt-0.5 size-4 shrink-0 text-dim" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><use href="#i-phone"/></svg>
+            <dd class="nums text-[14px]">+372 5000 0000</dd>
+          </div>
+          <div class="flex gap-3 py-3">
+            <svg class="mt-0.5 size-4 shrink-0 text-dim" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><use href="#i-mail"/></svg>
+            <dd class="text-[14px]">info@cubcar.ee</dd>
+          </div>
+          <div class="flex gap-3 py-3">
+            <svg class="mt-0.5 size-4 shrink-0 text-dim" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><use href="#i-clock"/></svg>
+            <dd class="nums text-[14px]">E–R 9–18, L 10–15, P suletud</dd>
+          </div>
+        </dl>
+
+        <div class="mt-5 flex flex-wrap gap-2">
+          <a href="tel:+3725000000" class="inline-flex h-10 flex-1 items-center justify-center rounded-plate bg-brand px-4 text-sm font-medium text-on-brand transition-opacity hover:opacity-90">Helista</a>
+          <a href="#" class="inline-flex h-10 flex-1 items-center justify-center rounded-plate border border-line px-4 text-sm font-medium transition-colors hover:bg-sunken">Kirjuta meile</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Enquiry form ───────────────────────────────────────────────────── -->
+<section class="border-t border-line bg-sunken">
+  <div class="mx-auto grid max-w-6xl gap-8 px-5 py-14 lg:grid-cols-[1fr_1.1fr]">
+    <div>
+      <h2 class="text-[26px] font-semibold tracking-tight">Ei leidnud õiget?</h2>
+      <p class="mt-3 max-w-md text-[15px] leading-relaxed text-dim">
+        Kirjuta, mida otsid. Meil käib nädalas läbi kümneid autosid, mis platsile ei jõuagi — kui midagi sobivat tuleb, anname teada.
+      </p>
+      <p class="mt-3 max-w-md text-[15px] leading-relaxed text-dim">
+        Vastame tavaliselt paari tunni jooksul, tööpäeviti alati sama päeva jooksul.
+      </p>
+    </div>
+
+    <div class="rounded-plate border border-line bg-surface p-6">
+      <div class="grid gap-4">
+        <label class="grid gap-1.5">
+          <span class="text-[13px] font-medium">Nimi</span>
+          <input class="h-10 rounded-plate border border-line bg-surface px-3 text-sm placeholder:text-dim" placeholder="Mari Tamm">
+        </label>
+        <div class="grid gap-4 sm:grid-cols-2">
+          <label class="grid gap-1.5">
+            <span class="text-[13px] font-medium">Telefon</span>
+            <input class="nums h-10 rounded-plate border border-line bg-surface px-3 text-sm placeholder:text-dim" placeholder="+372 5000 0000">
+          </label>
+          <label class="grid gap-1.5">
+            <span class="text-[13px] font-medium">E-post</span>
+            <input class="h-10 rounded-plate border border-line bg-surface px-3 text-sm placeholder:text-dim" placeholder="mari@naide.ee">
+          </label>
+        </div>
+        <label class="grid gap-1.5">
+          <span class="text-[13px] font-medium">Mida otsid?</span>
+          <textarea rows="4" class="rounded-plate border border-line bg-surface px-3 py-2 text-sm placeholder:text-dim" placeholder="Näiteks: pereauto kuni 15 000 €, automaat, diisel, alla 150 000 km."></textarea>
+        </label>
+        <label class="flex items-start gap-2.5 text-[13px] leading-relaxed text-dim">
+          <input type="checkbox" class="mt-0.5 size-4">
+          <span>Olen nõus, et CubCar võtab minuga ühendust. Andmeid ei jagata kolmandate osapooltega.</span>
+        </label>
+        <button class="inline-flex h-11 items-center justify-center rounded-plate bg-flag px-5 text-[15px] font-semibold text-on-flag transition-transform hover:-translate-y-px">Saada soov</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ─────────────────────────────────────────────────────────── -->
+<footer class="border-t border-line">
+  <div class="mx-auto max-w-6xl px-5 py-12">
+    <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+      <div>
+        <div class="text-[19px] font-bold tracking-[-0.02em]">CubCar</div>
+        <p class="mt-3 max-w-[30ch] text-[14px] leading-relaxed text-dim">
+          Sõiduautod, kaubikud ja ATV-d Lasnamäel alates 2015. aastast. Ostame, müüme ja võtame komisjoni.
+        </p>
+        <div class="mt-4 flex gap-2">
+          <a href="#" aria-label="Instagram" class="grid size-9 place-items-center rounded-plate border border-line transition-colors hover:bg-sunken">
+            <svg class="size-4" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><use href="#i-insta"/></svg>
+          </a>
+          <a href="#" aria-label="TikTok" class="grid size-9 place-items-center rounded-plate border border-line transition-colors hover:bg-sunken">
+            <svg class="size-3.5" fill="currentColor" viewBox="0 0 24 24"><use href="#i-play"/></svg>
+          </a>
+          <a href="#" aria-label="Auto24" class="grid size-9 place-items-center rounded-plate border border-line transition-colors hover:bg-sunken">
+            <svg class="size-4" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><use href="#i-tag"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <nav class="text-[14px]">
+        <div class="font-semibold">Sõidukid</div>
+        <ul class="mt-3 space-y-2 text-dim">
+          <li><a class="hover:text-fg" href="#">Sõiduautod</a></li>
+          <li><a class="hover:text-fg" href="#">Kaubikud</a></li>
+          <li><a class="hover:text-fg" href="#">ATV-d</a></li>
+          <li><a class="hover:text-fg" href="#">Kõik sõidukid</a></li>
+        </ul>
+      </nav>
+
+      <nav class="text-[14px]">
+        <div class="font-semibold">Teenused</div>
+        <ul class="mt-3 space-y-2 text-dim">
+          <li><a class="hover:text-fg" href="#">Vahetus</a></li>
+          <li><a class="hover:text-fg" href="#">Komisjonimüük</a></li>
+          <li><a class="hover:text-fg" href="#">Liising</a></li>
+          <li><a class="hover:text-fg" href="#">Garantii</a></li>
+        </ul>
+      </nav>
+
+      <div class="text-[14px]">
+        <div class="font-semibold">Kontakt</div>
+        <ul class="mt-3 space-y-2 text-dim">
+          <li class="nums">+372 5000 0000</li>
+          <li>info@cubcar.ee</li>
+          <li>Peterburi tee 46, Tallinn</li>
+          <li class="nums">E–R 9–18, L 10–15</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-10 flex flex-col gap-3 border-t border-line pt-6 text-[13px] text-dim sm:flex-row sm:items-center sm:justify-between">
+      <div class="nums">CubCar OÜ, registrikood 16000000, KMKR EE102000000</div>
+      <div class="flex gap-4">
+        <a class="hover:text-fg" href="#">Privaatsuspoliitika</a>
+        <a class="hover:text-fg" href="#">Küpsised</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ── Cookie banner ──────────────────────────────────────────────────── -->
+<div class="fixed inset-x-0 bottom-0 z-50 p-3 sm:p-4">
+  <div class="mx-auto flex max-w-3xl flex-col gap-3 rounded-plate border border-line bg-surface p-4 shadow-[0_6px_24px_rgba(0,0,0,.18)] sm:flex-row sm:items-center">
+    <p class="flex-1 text-[13px] leading-relaxed text-dim">
+      Kasutame küpsiseid, et näha, kust külastajad tulevad — Auto24-st, Instagramist või TikTokist. Statistikaküpsised on valikulised.
+    </p>
+    <div class="flex shrink-0 gap-2">
+      <button class="h-9 rounded-plate border border-line px-3 text-[13px] font-medium transition-colors hover:bg-sunken">Ainult vajalikud</button>
+      <button class="h-9 rounded-plate bg-brand px-3 text-[13px] font-medium text-on-brand transition-opacity hover:opacity-90">Nõustun</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Theme toggle + Ph ──────────────────────────────────────────────── -->
+<script>
+(function () {
+  var root = document.documentElement;
+
+  // follow the OS preference on load; the button overrides for this session
+  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    root.classList.add('dark');
+  }
+  document.getElementById('theme-toggle').addEventListener('click', function () {
+    root.classList.toggle('dark');
+  });
+
+  function paint(el) {
+    var spec = el.getAttribute('grid');
+    if (!spec) return;
+
+    var parts = spec.split(':');
+    var dims = parts[0].split('x');
+    var w = parseInt(dims[0], 10);
+    var h = parseInt(dims[1], 10);
+    var cells = parts[1].split(',');
+
+    var c = document.createElement('canvas');
+    c.width = w;
+    c.height = h;
+    var ctx = c.getContext('2d');
+
+    for (var y = 0; y < h; y++) {
+      for (var x = 0; x < w; x++) {
+        var hex = (cells[y * w + x] || 'ccc').trim();
+        ctx.fillStyle = '#' + hex;
+        ctx.fillRect(x, y, 1, 1);
+      }
+    }
+
+    el.appendChild(c);
+    el.setAttribute('role', 'img');
+    var alt = el.getAttribute('alt');
+    if (alt) el.setAttribute('aria-label', alt);
+  }
+
+  document.querySelectorAll('ph[grid]').forEach(paint);
+})();
+</script>
+
+</body>
+</html>
