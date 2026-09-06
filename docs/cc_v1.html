@@ -688,10 +688,24 @@
   </div>
 </footer>
 
+<!-- ══════════ cookie banner ══════════ -->
+<div id="cookie-banner" class="fixed inset-x-0 bottom-0 z-50 p-3 sm:p-4">
+  <div class="mx-auto flex max-w-3xl flex-col gap-3 rounded-[14px] border border-rule bg-card p-4 shadow-[0_8px_28px_rgb(19_26_23/0.14)] sm:flex-row sm:items-center">
+    <p class="flex-1 text-[13px] leading-relaxed text-soft">
+      Kasutame küpsiseid, et näha, kust külastajad tulevad — Auto24-st, Instagramist või TikTokist. Statistikaküpsised on valikulised.
+    </p>
+    <div class="flex shrink-0 gap-2">
+      <button type="button" class="h-9 rounded-[9px] border border-rule px-3 text-[13px] font-medium transition-colors hover:bg-paper">Ainult vajalikud</button>
+      <button type="button" class="h-9 rounded-[9px] bg-pine px-3 text-[13px] font-semibold text-white transition-colors hover:bg-pinedark">Nõustun</button>
+    </div>
+  </div>
+</div>
+
 <script>
 (function () {
   var root = document.documentElement;
   var toggle = document.getElementById('theme-toggle');
+  var banner = document.getElementById('cookie-banner');
 
   function paint(el) {
     var dark = root.classList.contains('dark');
@@ -734,11 +748,33 @@
     paintAll();
   }
 
+  function hideBanner() {
+    if (banner) banner.remove();
+    try {
+      localStorage.setItem('cubcar-cookies', 'dismissed');
+    } catch (err) {}
+  }
+
+  try {
+    if (localStorage.getItem('cubcar-cookies') === 'dismissed' && banner) {
+      banner.remove();
+      banner = null;
+    }
+  } catch (err) {}
+
   paintAll();
 
   if (toggle) {
     toggle.addEventListener('click', function () {
       setTheme(!root.classList.contains('dark'));
+    });
+  }
+
+  if (banner) {
+    banner.addEventListener('click', function (event) {
+      if (event.target && event.target.closest('button')) {
+        hideBanner();
+      }
     });
   }
 })();

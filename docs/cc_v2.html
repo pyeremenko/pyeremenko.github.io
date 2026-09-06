@@ -723,14 +723,14 @@
 </footer>
 
 <!-- ── Cookie banner ──────────────────────────────────────────────────── -->
-<div class="fixed inset-x-0 bottom-0 z-50 p-3 sm:p-4">
+<div id="cookie-banner" class="fixed inset-x-0 bottom-0 z-50 p-3 sm:p-4">
   <div class="mx-auto flex max-w-3xl flex-col gap-3 rounded-plate border border-line bg-card p-4 shadow-[0_4px_16px_rgba(20,32,26,.10)] sm:flex-row sm:items-center">
     <p class="flex-1 text-[13px] leading-relaxed text-muted-foreground">
       Kasutame küpsiseid, et näha, kust külastajad tulevad — Auto24-st, Instagramist või TikTokist. Statistikaküpsised on valikulised.
     </p>
     <div class="flex shrink-0 gap-2">
-      <button class="h-9 rounded-plate border border-line px-3 text-[13px] font-medium transition-colors hover:bg-muted">Ainult vajalikud</button>
-      <button class="h-9 rounded-plate bg-pine px-3 text-[13px] font-medium text-white transition-colors hover:bg-pine-hover">Nõustun</button>
+      <button type="button" class="h-9 rounded-plate border border-line px-3 text-[13px] font-medium transition-colors hover:bg-muted">Ainult vajalikud</button>
+      <button type="button" class="h-9 rounded-plate bg-pine px-3 text-[13px] font-medium text-white transition-colors hover:bg-pine-hover">Nõustun</button>
     </div>
   </div>
 </div>
@@ -740,6 +740,7 @@
 (function () {
   var root = document.documentElement;
   var toggle = document.getElementById('theme-toggle');
+  var banner = document.getElementById('cookie-banner');
 
   function paint(el) {
     var dark = root.classList.contains('dark');
@@ -786,6 +787,20 @@
     paintAll();
   }
 
+  function hideBanner() {
+    if (banner) banner.remove();
+    try {
+      localStorage.setItem('cubcar-cookies', 'dismissed');
+    } catch (err) {}
+  }
+
+  try {
+    if (localStorage.getItem('cubcar-cookies') === 'dismissed' && banner) {
+      banner.remove();
+      banner = null;
+    }
+  } catch (err) {}
+
   var saved = null;
   try {
     saved = localStorage.getItem('cubcar-theme');
@@ -800,6 +815,14 @@
   if (toggle) {
     toggle.addEventListener('click', function () {
       setTheme(!root.classList.contains('dark'));
+    });
+  }
+
+  if (banner) {
+    banner.addEventListener('click', function (event) {
+      if (event.target && event.target.closest('button')) {
+        hideBanner();
+      }
     });
   }
 })();

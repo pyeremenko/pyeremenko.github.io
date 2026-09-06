@@ -749,14 +749,14 @@
 </footer>
 
 <!-- ── Cookie banner ──────────────────────────────────────────────────── -->
-<div class="fixed inset-x-0 bottom-0 z-50 p-3 sm:p-4">
+<div id="cookie-banner" class="fixed inset-x-0 bottom-0 z-50 p-3 sm:p-4">
   <div class="mx-auto flex max-w-3xl flex-col gap-3 rounded-plate border border-line-strong bg-surface p-4 shadow-[0_8px_28px_rgb(0_0_0/0.18)] sm:flex-row sm:items-center">
     <p class="flex-1 text-[13px] leading-relaxed text-dim">
       Kasutame küpsiseid, et näha, kust külastajad tulevad — Auto24-st, Instagramist või TikTokist. Statistikaküpsised on valikulised.
     </p>
     <div class="flex shrink-0 gap-2">
-      <button class="h-9 rounded-plate border border-line-strong px-3 text-[13px] font-medium transition-colors hover:bg-raised">Ainult vajalikud</button>
-      <button class="h-9 rounded-plate bg-brand px-3 text-[13px] font-semibold text-brand-fg transition-transform hover:-translate-y-px">Nõustun</button>
+      <button type="button" class="h-9 rounded-plate border border-line-strong px-3 text-[13px] font-medium transition-colors hover:bg-raised">Ainult vajalikud</button>
+      <button type="button" class="h-9 rounded-plate bg-brand px-3 text-[13px] font-semibold text-brand-fg transition-transform hover:-translate-y-px">Nõustun</button>
     </div>
   </div>
 </div>
@@ -765,6 +765,7 @@
 <script>
 (function () {
   var root = document.documentElement;
+  var banner = document.getElementById('cookie-banner');
 
   // Ph: paint a tiny grid to canvas at native size; CSS upscales and blurs it.
   // Two grids per image so the photography can be art-directed per theme.
@@ -804,16 +805,41 @@
     document.querySelectorAll('ph[grid]').forEach(paint);
   }
 
+  function hideBanner() {
+    if (banner) banner.remove();
+    try {
+      localStorage.setItem('cubcar-cookies', 'dismissed');
+    } catch (err) {}
+  }
+
+  try {
+    if (localStorage.getItem('cubcar-cookies') === 'dismissed' && banner) {
+      banner.remove();
+      banner = null;
+    }
+  } catch (err) {}
+
   // Follow the OS preference on first load; the toggle overrides it in memory.
   if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
     root.classList.add('dark');
   }
   paintAll();
 
-  document.getElementById('theme-toggle').addEventListener('click', function () {
-    root.classList.toggle('dark');
-    paintAll();
-  });
+  var toggle = document.getElementById('theme-toggle');
+  if (toggle) {
+    toggle.addEventListener('click', function () {
+      root.classList.toggle('dark');
+      paintAll();
+    });
+  }
+
+  if (banner) {
+    banner.addEventListener('click', function (event) {
+      if (event.target && event.target.closest('button')) {
+        hideBanner();
+      }
+    });
+  }
 })();
 </script>
 
