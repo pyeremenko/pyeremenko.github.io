@@ -18,6 +18,7 @@
   @theme {
     --color-paper:     var(--paper);
     --color-card:      var(--card);
+    --color-card-alt:  var(--card-alt);
     --color-ink:       var(--ink);
     --color-soft:      var(--soft);
     --color-rule:      var(--rule);
@@ -35,6 +36,7 @@
     color-scheme: light;
     --paper: #F1F3EF;
     --card: #FFFFFF;
+    --card-alt: #EEF2EA;
     --ink: #131A17;
     --soft: #59635D;
     --rule: #D3D9D2;
@@ -48,6 +50,7 @@
     color-scheme: dark;
     --paper: #101612;
     --card: #171d1a;
+    --card-alt: #1E241F;
     --ink: #edf1ed;
     --soft: #98a39d;
     --rule: #2a332f;
@@ -88,8 +91,9 @@
   }
 
   .rule-top { border-top: 1px solid var(--color-rule); }
+  .bg-card-alt { background: var(--card-alt); }
 
-  :focus-visible { outline: 2px solid #0E5C4A; outline-offset: 2px; border-radius: 3px; }
+  :focus-visible { outline: 2px solid var(--color-pine); outline-offset: 2px; border-radius: 3px; }
   select, input, textarea { color-scheme: light; }
   .dark select, .dark input, .dark textarea { color-scheme: dark; }
 
@@ -185,95 +189,91 @@
 
 <!-- ══════════ hero ══════════ -->
 <section class="mx-auto max-w-[1180px] px-5 pt-10 lg:pt-14">
-  <div class="grid gap-4 lg:grid-cols-[1.05fr_0.95fr]">
+  <div class="relative overflow-hidden rounded-[24px] border border-rule bg-pinedark text-white shadow-[0_18px_60px_-34px_rgb(19_26_23/.55)]">
+    <Ph class="absolute inset-0 w-full h-full"
+        alt="Wide view of the CubCar forecourt with a row of cars under soft Baltic daylight"
+        grid="10x6:dde,dde,eee,eee,dde,dde,dde,eee,eee,dde,cdd,cdd,ccd,bcc,abb,9aa,abb,bcc,ccd,cdd,bbb,bbb,aab,99a,889,889,99a,aab,bbb,bbb,aa9,998,ccd,ddd,dde,dde,ddd,ccd,998,aa9,776,665,776,887,887,887,887,776,665,776,998,998,aa9,aa9,998,998,aa9,aa9,998,998"></Ph>
+    <div class="absolute inset-0 bg-gradient-to-br from-black/72 via-black/42 to-black/82"></div>
 
-    <div class="relative overflow-hidden rounded-[24px] border border-rule bg-pinedark text-white shadow-[0_18px_60px_-34px_rgb(19_26_23/.55)]">
-      <Ph class="absolute inset-0 w-full h-full"
-          alt="Wide view of the CubCar forecourt with a row of cars under soft Baltic daylight"
-          grid="10x6:dde,dde,eee,eee,dde,dde,dde,eee,eee,dde,cdd,cdd,ccd,bcc,abb,9aa,abb,bcc,ccd,cdd,bbb,bbb,aab,99a,889,889,99a,aab,bbb,bbb,aa9,998,ccd,ddd,dde,dde,ddd,ccd,998,aa9,776,665,776,887,887,887,887,776,665,776,998,998,aa9,aa9,998,998,aa9,aa9,998,998"></Ph>
-      <div class="absolute inset-0 bg-gradient-to-br from-black/72 via-black/42 to-black/82"></div>
+    <div class="relative flex min-h-[520px] flex-col justify-between p-6 sm:p-8 lg:p-10">
+      <div>
+        <p class="text-[13px] font-medium uppercase tracking-[.16em] text-amber">Plats Lasnamäel, avatud E–L</p>
+        <h1 class="mt-4 max-w-[14ch] text-[clamp(2.4rem,5.5vw,4.4rem)] font-extrabold leading-[.96] tracking-[-.04em] text-white">
+          Kogu ladu ühel lehel
+        </h1>
+        <p class="mt-5 max-w-[44ch] text-[16px] leading-relaxed text-white/78">
+          Ei mingit ilustatud vitriini. Siin on kõik sõiduautod, kaubikud ja ATV-d,
+          mis meil täna platsil seisavad, koos hindade ja põhiandmetega.
+        </p>
 
-      <div class="relative flex min-h-[520px] flex-col justify-between p-6 sm:p-8 lg:p-10">
-        <div>
-          <p class="text-[13px] font-medium uppercase tracking-[.16em] text-amber">Plats Lasnamäel, avatud E–L</p>
-          <h1 class="mt-4 max-w-[14ch] text-[clamp(2.4rem,5.5vw,4.4rem)] font-extrabold leading-[.96] tracking-[-.04em] text-white">
-            Kogu ladu ühel lehel
-          </h1>
-          <p class="mt-5 max-w-[44ch] text-[16px] leading-relaxed text-white/78">
-            Ei mingit ilustatud vitriini. Siin on kõik sõiduautod, kaubikud ja ATV-d,
-            mis meil täna platsil seisavad, koos hindade ja põhiandmetega.
-          </p>
-
-          <div class="mt-7 flex flex-wrap gap-3">
-            <a href="#stock" class="inline-flex h-12 items-center rounded-[10px] bg-amber px-5 text-[15px] font-semibold text-ink transition-transform hover:-translate-y-px">
-              Vaata laoseisu
-            </a>
-            <a href="#trade" class="inline-flex h-12 items-center rounded-[10px] border border-white/25 bg-white/10 px-5 text-[15px] font-medium text-white backdrop-blur transition-colors hover:bg-white/20">
-              Paku oma autot
-            </a>
-          </div>
+        <div class="mt-7 flex flex-wrap gap-3">
+          <a href="#stock" class="inline-flex h-12 items-center rounded-[10px] bg-amber px-5 text-[15px] font-semibold text-ink transition-transform hover:-translate-y-px">
+            Vaata laoseisu
+          </a>
+          <a href="#trade" class="inline-flex h-12 items-center rounded-[10px] border border-white/25 bg-white/10 px-5 text-[15px] font-medium text-white backdrop-blur transition-colors hover:bg-white/20">
+            Paku oma autot
+          </a>
         </div>
+      </div>
 
-        <div class="grid grid-cols-2 gap-px overflow-hidden rounded-[18px] border border-white/12 bg-white/10 backdrop-blur-sm sm:grid-cols-4">
-          <div class="px-4 py-4">
-            <div class="font-mono text-[30px] font-bold leading-none tracking-tight text-white">34</div>
-            <div class="mt-1 text-[13px] leading-tight text-white/60">sõiduautot</div>
-          </div>
-          <div class="border-l border-white/12 px-4 py-4">
-            <div class="font-mono text-[30px] font-bold leading-none tracking-tight text-white">11</div>
-            <div class="mt-1 text-[13px] leading-tight text-white/60">kaubikut</div>
-          </div>
-          <div class="border-t border-white/12 px-4 py-4 sm:border-l sm:border-t-0">
-            <div class="font-mono text-[30px] font-bold leading-none tracking-tight text-white">7</div>
-            <div class="mt-1 text-[13px] leading-tight text-white/60">ATV-d</div>
-          </div>
-          <div class="border-l border-t border-white/12 px-4 py-4 sm:border-t-0">
-            <div class="font-mono text-[30px] font-bold leading-none tracking-tight text-amber">5</div>
-            <div class="mt-1 text-[13px] leading-tight text-white/60">lisandus sel nädalal</div>
-          </div>
+      <div class="grid grid-cols-2 gap-px overflow-hidden rounded-[18px] border border-white/12 bg-white/10 backdrop-blur-sm sm:grid-cols-4">
+        <div class="px-4 py-4">
+          <div class="font-mono text-[30px] font-bold leading-none tracking-tight text-white">34</div>
+          <div class="mt-1 text-[13px] leading-tight text-white/60">sõiduautot</div>
+        </div>
+        <div class="border-l border-white/12 px-4 py-4">
+          <div class="font-mono text-[30px] font-bold leading-none tracking-tight text-white">11</div>
+          <div class="mt-1 text-[13px] leading-tight text-white/60">kaubikut</div>
+        </div>
+        <div class="border-t border-white/12 px-4 py-4 sm:border-l sm:border-t-0">
+          <div class="font-mono text-[30px] font-bold leading-none tracking-tight text-white">7</div>
+          <div class="mt-1 text-[13px] leading-tight text-white/60">ATV-d</div>
+        </div>
+        <div class="border-l border-t border-white/12 px-4 py-4 sm:border-t-0">
+          <div class="font-mono text-[30px] font-bold leading-none tracking-tight text-amber">5</div>
+          <div class="mt-1 text-[13px] leading-tight text-white/60">lisandus sel nädalal</div>
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="grid gap-3 sm:grid-cols-2">
-      <article class="sm:col-span-2 overflow-hidden rounded-[22px] border border-rule bg-card shadow-[0_10px_30px_-24px_rgb(19_26_23/.25)]">
-        <Ph class="media h-56 w-full"
-            alt="Dark blue estate car photographed three-quarter front on a bright overcast day"
-            grid="6x4:dde,dde,eee,eee,dde,dde,bcd,abc,345,346,abc,bcd,998,234,235,235,234,998,aa9,887,776,776,887,aa9"></Ph>
-        <div class="p-5 sm:p-6">
-          <div class="flex flex-wrap items-start justify-between gap-3">
-            <div>
-              <p class="text-[13px] uppercase tracking-[.14em] text-soft">Nädala valik</p>
-              <h2 class="mt-2 text-[24px] font-semibold tracking-[-.03em]">Volkswagen Passat 2.0 TDI</h2>
-              <p class="mt-2 max-w-md text-[15px] leading-relaxed text-soft">
-                2019, 148 200 km, automaat. Üks selge näide sellest, mis meil praegu platsil on.
-              </p>
-            </div>
-            <div class="text-right">
-              <div class="font-mono text-[28px] font-bold tracking-tight text-pine">14 900 €</div>
-              <div class="mt-1 text-[13px] font-mono text-soft">al. 189 €/kuus</div>
-            </div>
+  <div class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+    <article class="sm:col-span-2 lg:col-span-2 overflow-hidden rounded-[22px] border border-rule bg-card shadow-[0_10px_30px_-24px_rgb(19_26_23/.25)]">
+      <Ph class="media h-56 w-full"
+          alt="Dark blue estate car photographed three-quarter front on a bright overcast day"
+          grid="6x4:dde,dde,eee,eee,dde,dde,bcd,abc,345,346,abc,bcd,998,234,235,235,234,998,aa9,887,776,776,887,aa9"></Ph>
+      <div class="p-5 sm:p-6">
+        <div class="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <p class="text-[13px] uppercase tracking-[.14em] text-soft">Nädala valik</p>
+            <h2 class="mt-2 text-[24px] font-semibold tracking-[-.03em]">Volkswagen Passat 2.0 TDI</h2>
+            <p class="mt-2 max-w-md text-[15px] leading-relaxed text-soft">
+              2019, 148 200 km, automaat. Üks selge näide sellest, mis meil praegu platsil on.
+            </p>
+          </div>
+          <div class="text-right">
+            <div class="font-mono text-[28px] font-bold tracking-tight text-pine">14 900 €</div>
+            <div class="mt-1 text-[13px] font-mono text-soft">al. 189 €/kuus</div>
           </div>
         </div>
-      </article>
+      </div>
+    </article>
 
-      <article class="rounded-[18px] border border-rule bg-card p-5">
-        <p class="text-[13px] uppercase tracking-[.14em] text-soft">Vahetus</p>
-        <h3 class="mt-2 text-[18px] font-semibold tracking-[-.02em]">Toome su vana auto uue vastu</h3>
-        <p class="mt-2 text-[15px] leading-relaxed text-soft">
-          Saada paar pilti ja põhiandmed. Vastame hinnapakkumisega tavaliselt sama päeva jooksul.
-        </p>
-      </article>
+    <article class="rounded-[18px] border border-rule bg-card-alt p-5">
+      <p class="text-[13px] uppercase tracking-[.14em] text-soft">Vahetus</p>
+      <h3 class="mt-2 text-[18px] font-semibold tracking-[-.02em]">Toome su vana auto uue vastu</h3>
+      <p class="mt-2 text-[15px] leading-relaxed text-soft">
+        Saada paar pilti ja põhiandmed. Vastame hinnapakkumisega tavaliselt sama päeva jooksul.
+      </p>
+    </article>
 
-      <article class="rounded-[18px] border border-rule bg-card p-5">
-        <p class="text-[13px] uppercase tracking-[.14em] text-soft">Komisjonimüük</p>
-        <h3 class="mt-2 text-[18px] font-semibold tracking-[-.02em]">Müü oma auto meie platsil</h3>
-        <p class="mt-2 text-[15px] leading-relaxed text-soft">
-          Sinu auto seisab meie platsil, meie teeme pildid ja kuulutused ning suhtleme ostjatega.
-        </p>
-      </article>
-    </div>
-
+    <article class="rounded-[18px] border border-rule bg-card-alt p-5">
+      <p class="text-[13px] uppercase tracking-[.14em] text-soft">Komisjonimüük</p>
+      <h3 class="mt-2 text-[18px] font-semibold tracking-[-.02em]">Müü oma auto meie platsil</h3>
+      <p class="mt-2 text-[15px] leading-relaxed text-soft">
+        Sinu auto seisab meie platsil, meie teeme pildid ja kuulutused ning suhtleme ostjatega.
+      </p>
+    </article>
   </div>
 </section>
 
@@ -371,7 +371,7 @@
   </div>
 
   <div class="pt-6">
-    <form class="relative bg-card border border-rule rounded-[14px] p-3 sm:p-4 grid gap-3 grid-cols-2 lg:grid-cols-[repeat(4,1fr)_auto] shadow-[0_10px_30px_-18px_rgb(19_26_23/.35)]">
+    <form class="relative bg-card-alt border border-rule rounded-[14px] p-3 sm:p-4 grid gap-3 grid-cols-2 lg:grid-cols-[repeat(4,1fr)_auto] shadow-[0_10px_30px_-18px_rgb(19_26_23/.35)]">
       <label class="grid gap-1.5">
         <span class="text-[13px] text-soft">Mark</span>
         <select class="h-11 rounded-[9px] border border-rule bg-card px-3 text-[15px] hover:border-ink/30">
@@ -406,7 +406,7 @@
   <div class="grid gap-4 pt-6 sm:grid-cols-2 lg:grid-cols-3">
 
     <!-- 1 -->
-    <article class="bg-card border border-rule rounded-[14px] overflow-hidden hover:border-ink/35">
+    <article class="bg-card-alt border border-rule rounded-[14px] overflow-hidden hover:border-ink/35">
       <div class="relative">
         <Ph class="media w-full aspect-[3/2]"
             alt="Dark blue Volkswagen Passat estate, front three-quarter view on tarmac"
@@ -429,7 +429,7 @@
     </article>
 
     <!-- 2 -->
-    <article class="bg-card border border-rule rounded-[14px] overflow-hidden hover:border-ink/35">
+    <article class="bg-card-alt border border-rule rounded-[14px] overflow-hidden hover:border-ink/35">
       <div class="relative">
         <Ph class="media w-full aspect-[3/2]"
             alt="White Ford Transit panel van, side view in a yard"
@@ -451,7 +451,7 @@
     </article>
 
     <!-- 3 -->
-    <article class="bg-card border border-rule rounded-[14px] overflow-hidden hover:border-ink/35">
+    <article class="bg-card-alt border border-rule rounded-[14px] overflow-hidden hover:border-ink/35">
       <div class="relative">
         <Ph class="media w-full aspect-[3/2]"
             alt="Red Škoda Fabia hatchback parked in front of a pale wall"
@@ -474,7 +474,7 @@
     </article>
 
     <!-- 4 -->
-    <article class="bg-card border border-rule rounded-[14px] overflow-hidden hover:border-ink/35">
+    <article class="bg-card-alt border border-rule rounded-[14px] overflow-hidden hover:border-ink/35">
       <div class="relative">
         <Ph class="media w-full aspect-[3/2]"
             alt="Silver Toyota RAV4 crossover on a gravel forecourt"
@@ -496,7 +496,7 @@
     </article>
 
     <!-- 5 -->
-    <article class="bg-card border border-rule rounded-[14px] overflow-hidden hover:border-ink/35">
+    <article class="bg-card-alt border border-rule rounded-[14px] overflow-hidden hover:border-ink/35">
       <div class="relative">
         <Ph class="media w-full aspect-[3/2]"
             alt="Green CFMOTO quad bike on grass at the edge of a forest track"
@@ -518,7 +518,7 @@
     </article>
 
     <!-- 6 -->
-    <article class="bg-card border border-rule rounded-[14px] overflow-hidden hover:border-ink/35">
+    <article class="bg-card-alt border border-rule rounded-[14px] overflow-hidden hover:border-ink/35">
       <div class="relative">
         <Ph class="media w-full aspect-[3/2]"
             alt="Black BMW 5 Series saloon photographed at dusk with reflections on the bonnet"
@@ -555,7 +555,7 @@
 
   <div class="grid gap-4 pt-6 sm:grid-cols-3">
 
-    <a href="#" class="bg-card border border-rule rounded-[14px] p-4 hover:border-ink/35">
+    <a href="#" class="bg-card-alt border border-rule rounded-[14px] p-4 hover:border-ink/35">
       <Ph class="media w-full aspect-square rounded-[10px]"
           alt="Screenshot of a classified listing grid with vehicle thumbnails on a white page"
           grid="4x4:eee,eee,eee,eee,eee,ccd,ccd,eee,eee,ccd,ccd,eee,ddd,ddd,ddd,ddd"></Ph>
@@ -566,7 +566,7 @@
       <p class="mt-1.5 text-[15px] text-soft leading-relaxed">Kõik sõidukid on ka Auto24-s, samade hindadega.</p>
     </a>
 
-    <a href="#" class="bg-card border border-rule rounded-[14px] p-4 hover:border-ink/35">
+    <a href="#" class="bg-card-alt border border-rule rounded-[14px] p-4 hover:border-ink/35">
       <Ph class="media w-full aspect-square rounded-[10px]"
           alt="Person filming a car interior on a phone, warm light through the windscreen"
           grid="4x4:dde,dcc,cbb,ccd,ba9,c97,b86,a98,987,da9,c97,876,665,776,665,554"></Ph>
@@ -577,7 +577,7 @@
       <p class="mt-1.5 text-[15px] text-soft leading-relaxed">Uued autod platsil, tehingud, ja natuke nalja vahele.</p>
     </a>
 
-    <a href="#" class="bg-card border border-rule rounded-[14px] p-4 hover:border-ink/35">
+    <a href="#" class="bg-card-alt border border-rule rounded-[14px] p-4 hover:border-ink/35">
       <Ph class="media w-full aspect-square rounded-[10px]"
           alt="Orange quad bike mid-air over a dirt jump, dust cloud behind"
           grid="4x4:cde,dde,cde,ccd,aa9,c73,b62,998,875,a52,975,764,764,653,653,764"></Ph>
@@ -782,7 +782,8 @@
     { h: 18, a: 26, w: 52, c: 14 },
     { h: 332, a: 336, w: 46, c: 16 },
     { h: 92, a: 104, w: 48, c: 18 },
-    { h: 46, a: 54, w: 50, c: 20 }
+    { h: 46, a: 54, w: 50, c: 20 },
+    { grey: true, h: 0, a: 0, w: 0, c: 0 }
   ];
   var schemeIndex = 0;
 
@@ -838,16 +839,20 @@
   function applyScheme(index) {
     var scheme = schemes[index % schemes.length];
     var dark = root.classList.contains('dark');
+    var neutral = scheme.grey === true;
+    var muted = !neutral && (index % 2 === 1);
+    var comp = hue(scheme.h, 180);
     setVars({
-      paper: hsl(hue(scheme.h, 8), 18, dark ? 10 : 95),
-      card: hsl(hue(scheme.h, 3), 10, dark ? 15 : 100),
-      ink: hsl(hue(scheme.h, 18), 18, dark ? 95 : 11),
-      soft: hsl(hue(scheme.h, 12), 8, dark ? 68 : 38),
-      rule: hsl(hue(scheme.h, 5), 10, dark ? 24 : 84),
-      pine: hsl(hue(scheme.a, 0), 55, dark ? 66 : 32),
-      pinedark: hsl(hue(scheme.a, 8), 60, dark ? 26 : 23),
-      amber: hsl(hue(scheme.w, 0), 90, dark ? 58 : 54),
-      clay: hsl(hue(scheme.c, 8), 62, dark ? 60 : 42)
+      paper: hsl(neutral ? 0 : hue(scheme.h, 8), neutral ? 2 : (muted ? 4 : 18), dark ? 10 : 95),
+      card: hsl(neutral ? 0 : hue(scheme.h, 3), neutral ? 2 : (muted ? 3 : 10), dark ? 15 : 100),
+      'card-alt': hsl(neutral ? 0 : comp, neutral ? 2 : (muted ? 3 : 10), dark ? 16 : 96),
+      ink: hsl(neutral ? 0 : hue(scheme.h, 18), neutral ? 4 : (muted ? 6 : 18), dark ? 95 : 11),
+      soft: hsl(neutral ? 0 : hue(scheme.h, 12), neutral ? 3 : (muted ? 4 : 8), dark ? 68 : 38),
+      rule: hsl(neutral ? 0 : hue(scheme.h, 5), neutral ? 3 : (muted ? 4 : 10), dark ? 24 : 84),
+      pine: hsl(neutral ? 0 : hue(scheme.a, 0), neutral ? 4 : (muted ? 34 : 55), dark ? 66 : 32),
+      pinedark: hsl(neutral ? 0 : hue(scheme.a, 8), neutral ? 5 : (muted ? 38 : 60), dark ? 26 : 23),
+      amber: hsl(neutral ? 0 : comp, neutral ? 6 : (muted ? 28 : 78), dark ? 58 : 54),
+      clay: hsl(neutral ? 0 : hue(comp, 10), neutral ? 5 : (muted ? 20 : 46), dark ? 60 : 42)
     });
     root.style.colorScheme = dark ? 'dark' : 'light';
   }

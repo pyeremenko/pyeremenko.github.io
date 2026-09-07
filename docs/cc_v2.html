@@ -774,7 +774,8 @@
     { h: 18, a: 24, w: 52 },
     { h: 332, a: 336, w: 46 },
     { h: 92, a: 100, w: 48 },
-    { h: 46, a: 54, w: 50 }
+    { h: 46, a: 54, w: 50 },
+    { grey: true, h: 0, a: 0, w: 0 }
   ];
   var schemeIndex = 0;
 
@@ -834,17 +835,20 @@
   function applyScheme(index) {
     var scheme = schemes[index % schemes.length];
     var dark = root.classList.contains('dark');
+    var neutral = scheme.grey === true;
+    var muted = !neutral && (index % 2 === 1);
+    var comp = hue(scheme.h, 180);
     setVars({
-      paper: hsl(hue(scheme.h, 8), 18, dark ? 11 : 97),
-      card: hsl(hue(scheme.h, 3), 10, dark ? 15 : 100),
-      muted: hsl(hue(scheme.h, 6), 10, dark ? 18 : 95),
-      'muted-foreground': hsl(hue(scheme.h, 14), 8, dark ? 68 : 40),
-      line: hsl(hue(scheme.h, 5), 10, dark ? 28 : 89),
-      pine: hsl(hue(scheme.a, 0), 60, dark ? 68 : 34),
-      'pine-hover': hsl(hue(scheme.a, 8), 62, dark ? 60 : 29),
-      signal: hsl(hue(scheme.w, 0), 90, dark ? 60 : 54),
-      'signal-ink': hsl(hue(scheme.w, 10), 55, dark ? 20 : 26),
-      ink: hsl(hue(scheme.h, 18), 18, dark ? 96 : 12)
+      paper: hsl(neutral ? 0 : hue(scheme.h, 8), neutral ? 2 : (muted ? 4 : 18), dark ? 11 : 97),
+      card: hsl(neutral ? 0 : hue(scheme.h, 3), neutral ? 2 : (muted ? 3 : 10), dark ? 15 : 100),
+      muted: hsl(neutral ? 0 : comp, neutral ? 2 : (muted ? 3 : 10), dark ? 18 : 95),
+      'muted-foreground': hsl(neutral ? 0 : hue(scheme.h, 14), neutral ? 3 : (muted ? 12 : 8), dark ? 68 : 40),
+      line: hsl(neutral ? 0 : hue(scheme.h, 5), neutral ? 3 : (muted ? 4 : 10), dark ? 28 : 89),
+      pine: hsl(neutral ? 0 : hue(scheme.a, 0), neutral ? 4 : (muted ? 30 : 60), dark ? 68 : 34),
+      'pine-hover': hsl(neutral ? 0 : hue(scheme.a, 8), neutral ? 5 : (muted ? 34 : 62), dark ? 60 : 29),
+      signal: hsl(neutral ? 0 : hue(scheme.w, 0), neutral ? 6 : (muted ? 36 : 84), dark ? 60 : 54),
+      'signal-ink': hsl(0, 0, dark ? 20 : 12),
+      ink: hsl(neutral ? 0 : hue(scheme.h, 18), neutral ? 4 : (muted ? 6 : 18), dark ? 96 : 12)
     });
     root.style.colorScheme = dark ? 'dark' : 'light';
   }

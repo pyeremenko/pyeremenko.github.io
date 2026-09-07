@@ -27,6 +27,10 @@
   }
 
   @layer base {
+    :root {
+      --surface-alt: oklch(0.966 0.008 245);
+    }
+
     .dark {
       --color-bg:      oklch(0.172 0.018 262);
       --color-surface: oklch(0.218 0.020 262);
@@ -38,6 +42,7 @@
       --color-on-brand:oklch(0.150 0.020 262);
       --color-flag:    oklch(0.790 0.130 68);
       --color-on-flag: oklch(0.210 0.045 60);
+      --surface-alt:   oklch(0.214 0.016 70);
     }
 
     html { scroll-behavior: smooth; }
@@ -48,6 +53,7 @@
     .dark select, .dark input, .dark textarea { color-scheme: dark; }
     .rail { scrollbar-width: none; }
     .rail::-webkit-scrollbar { display: none; }
+    .bg-surface-alt { background: var(--surface-alt); }
 
     /* Ph — blurred canvas placeholder standing in for a photograph */
     ph { display: block; position: relative; overflow: hidden; background: var(--color-sunken); }
@@ -231,7 +237,7 @@
     <h2 class="text-[26px] font-semibold tracking-tight">Kolm viisi, kuidas saame aidata</h2>
 
     <div class="mt-6 grid gap-4 sm:grid-cols-3">
-      <div class="overflow-hidden rounded-plate border border-line bg-surface">
+      <div class="overflow-hidden rounded-plate border border-line bg-surface-alt">
         <ph class="h-32" alt="Car keys changing hands across a desk, warm indoor light"
             grid="6x4:dcb,edc,fed,fed,edc,dcb,c98,b87,a76,a76,b87,c98,eca,dba,ca9,ca9,dba,eca,765,654,543,543,654,765"></ph>
         <div class="p-5">
@@ -241,7 +247,7 @@
         </div>
       </div>
 
-      <div class="overflow-hidden rounded-plate border border-line bg-surface">
+      <div class="overflow-hidden rounded-plate border border-line bg-surface-alt">
         <ph class="h-32" alt="Row of cars parked in a line on a dealership forecourt seen from a low angle"
             grid="6x4:cde,dde,eef,eef,dde,cde,998,887,776,776,887,998,776,665,554,554,665,776,998,887,776,776,887,998"></ph>
         <div class="p-5">
@@ -251,7 +257,7 @@
         </div>
       </div>
 
-      <div class="overflow-hidden rounded-plate border border-line bg-surface">
+      <div class="overflow-hidden rounded-plate border border-line bg-surface-alt">
         <ph class="h-32" alt="Paperwork and a pen on a desk beside a set of car keys"
             grid="6x4:eee,eef,fff,fff,eef,eee,ddd,ccc,bbb,bbb,ccc,ddd,cba,ba9,a98,a98,ba9,cba,887,776,665,665,776,887"></ph>
         <div class="p-5">
@@ -278,7 +284,7 @@
         <label class="grid gap-1.5">
           <span class="text-[13px] font-medium">Mark</span>
           <div class="relative">
-            <select class="h-9 w-full appearance-none rounded-plate border border-line bg-surface px-2.5 pr-8 text-[13px]">
+            <select class="h-9 w-full appearance-none rounded-plate border border-line bg-surface-alt px-2.5 pr-8 text-[13px]">
               <option>Kõik margid</option><option>Volkswagen</option><option>Toyota</option><option>Škoda</option><option>Volvo</option><option>Ford</option><option>CFMoto</option>
             </select>
             <svg class="pointer-events-none absolute right-2.5 top-2.5 size-4 text-dim" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><use href="#i-chev"/></svg>
@@ -287,7 +293,7 @@
         <label class="grid gap-1.5">
           <span class="text-[13px] font-medium">Kütus</span>
           <div class="relative">
-            <select class="h-9 w-full appearance-none rounded-plate border border-line bg-surface px-2.5 pr-8 text-[13px]">
+            <select class="h-9 w-full appearance-none rounded-plate border border-line bg-surface-alt px-2.5 pr-8 text-[13px]">
               <option>Kõik kütused</option><option>Diisel</option><option>Bensiin</option><option>Hübriid</option><option>Elekter</option>
             </select>
             <svg class="pointer-events-none absolute right-2.5 top-2.5 size-4 text-dim" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><use href="#i-chev"/></svg>
@@ -296,7 +302,7 @@
         <label class="grid gap-1.5">
           <span class="text-[13px] font-medium">Käigukast</span>
           <div class="relative">
-            <select class="h-9 w-full appearance-none rounded-plate border border-line bg-surface px-2.5 pr-8 text-[13px]">
+            <select class="h-9 w-full appearance-none rounded-plate border border-line bg-surface-alt px-2.5 pr-8 text-[13px]">
               <option>Kõik käigukastid</option><option>Automaat</option><option>Manuaal</option>
             </select>
             <svg class="pointer-events-none absolute right-2.5 top-2.5 size-4 text-dim" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><use href="#i-chev"/></svg>
@@ -305,7 +311,7 @@
         <label class="grid gap-1.5">
           <span class="text-[13px] font-medium">Vedu</span>
           <div class="relative">
-            <select class="h-9 w-full appearance-none rounded-plate border border-line bg-surface px-2.5 pr-8 text-[13px]">
+            <select class="h-9 w-full appearance-none rounded-plate border border-line bg-surface-alt px-2.5 pr-8 text-[13px]">
               <option>Kõik veoskeemid</option><option>Esivedu</option><option>Tagavedu</option><option>Nelikvedu</option>
             </select>
             <svg class="pointer-events-none absolute right-2.5 top-2.5 size-4 text-dim" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><use href="#i-chev"/></svg>
@@ -571,7 +577,7 @@
     <ph class="h-[260px] w-full rounded-plate" alt="Street map of Lasnamäe, Tallinn showing the CubCar forecourt on Peterburi tee with a marker pin"
         grid="14x5:ddd,ccc,ddd,ddd,ccc,ddd,ddd,ccc,ddd,ddd,ccc,ddd,ddd,ccc,ccc,ccc,bbb,ccc,ccc,ccc,bbb,ccc,ccc,ccc,bbb,ccc,ccc,ccc,aaa,aaa,aaa,aaa,aaa,aaa,aaa,aaa,aaa,aaa,aaa,aaa,aaa,aaa,ccc,bbb,ccc,ccc,bbb,ccc,ccc,bbb,ccc,ccc,bbb,ccc,ccc,bbb,9ab,8ab,7ab,8ab,9ab,ccc,ccc,bbb,ccc,ccc,ccc,bbb,ccc,ccc"></ph>
 
-    <div class="mt-4 w-full rounded-plate border border-line bg-surface p-6 shadow-[0_10px_40px_rgba(0,0,0,.18)] sm:p-7">
+    <div class="mt-4 w-full rounded-plate border border-line bg-surface-alt p-6 shadow-[0_10px_40px_rgba(0,0,0,.18)] sm:p-7">
       <h2 class="text-[22px] font-semibold tracking-tight">Tule vaatama</h2>
       <p class="mt-2 text-[14px] leading-relaxed text-dim">Plats on avatud ka ilma etteteatamiseta. Proovisõiduks anna päev ette teada.</p>
 
@@ -607,7 +613,7 @@
 
     <div class="absolute inset-0">
       <div class="mx-auto flex h-full max-w-6xl items-center px-5">
-        <div class="w-full max-w-md rounded-plate border border-line bg-surface p-6 shadow-[0_10px_40px_rgba(0,0,0,.18)] sm:p-7">
+        <div class="w-full max-w-md rounded-plate border border-line bg-surface-alt p-6 shadow-[0_10px_40px_rgba(0,0,0,.18)] sm:p-7">
           <h2 class="text-[22px] font-semibold tracking-tight">Tule vaatama</h2>
           <p class="mt-2 text-[14px] leading-relaxed text-dim">Plats on avatud ka ilma etteteatamiseta. Proovisõiduks anna päev ette teada.</p>
 
@@ -653,25 +659,25 @@
       </p>
     </div>
 
-    <div class="rounded-plate border border-line bg-surface p-6">
+    <div class="rounded-plate border border-line bg-surface-alt p-6">
       <div class="grid gap-4">
         <label class="grid gap-1.5">
           <span class="text-[13px] font-medium">Nimi</span>
-          <input class="h-10 rounded-plate border border-line bg-surface px-3 text-sm placeholder:text-dim" placeholder="Mari Tamm">
+          <input class="h-10 rounded-plate border border-line bg-surface-alt px-3 text-sm placeholder:text-dim" placeholder="Mari Tamm">
         </label>
         <div class="grid gap-4 sm:grid-cols-2">
           <label class="grid gap-1.5">
             <span class="text-[13px] font-medium">Telefon</span>
-            <input class="nums h-10 rounded-plate border border-line bg-surface px-3 text-sm placeholder:text-dim" placeholder="+372 5000 0000">
+            <input class="nums h-10 rounded-plate border border-line bg-surface-alt px-3 text-sm placeholder:text-dim" placeholder="+372 5000 0000">
           </label>
           <label class="grid gap-1.5">
             <span class="text-[13px] font-medium">E-post</span>
-            <input class="h-10 rounded-plate border border-line bg-surface px-3 text-sm placeholder:text-dim" placeholder="mari@naide.ee">
+            <input class="h-10 rounded-plate border border-line bg-surface-alt px-3 text-sm placeholder:text-dim" placeholder="mari@naide.ee">
           </label>
         </div>
         <label class="grid gap-1.5">
           <span class="text-[13px] font-medium">Mida otsid?</span>
-          <textarea rows="4" class="rounded-plate border border-line bg-surface px-3 py-2 text-sm placeholder:text-dim" placeholder="Näiteks: pereauto kuni 15 000 €, automaat, diisel, alla 150 000 km."></textarea>
+          <textarea rows="4" class="rounded-plate border border-line bg-surface-alt px-3 py-2 text-sm placeholder:text-dim" placeholder="Näiteks: pereauto kuni 15 000 €, automaat, diisel, alla 150 000 km."></textarea>
         </label>
         <label class="flex items-start gap-2.5 text-[13px] leading-relaxed text-dim">
           <input type="checkbox" class="mt-0.5 size-4">
@@ -748,7 +754,7 @@
 
 <!-- ── Cookie banner ──────────────────────────────────────────────────── -->
 <div id="cookie-banner" class="fixed inset-x-0 bottom-0 z-50 p-3 sm:p-4">
-  <div class="mx-auto flex max-w-3xl flex-col gap-3 rounded-plate border border-line bg-surface p-4 shadow-[0_6px_24px_rgba(0,0,0,.18)] sm:flex-row sm:items-center">
+  <div class="mx-auto flex max-w-3xl flex-col gap-3 rounded-plate border border-line bg-surface-alt p-4 shadow-[0_6px_24px_rgba(0,0,0,.18)] sm:flex-row sm:items-center">
     <p class="flex-1 text-[13px] leading-relaxed text-dim">
       Kasutame küpsiseid, et näha, kust külastajad tulevad — Auto24-st, Instagramist või TikTokist. Statistikaküpsised on valikulised.
     </p>
@@ -773,7 +779,8 @@
     { h: 18, a: 24, w: 52 },
     { h: 330, a: 336, w: 46 },
     { h: 92, a: 100, w: 48 },
-    { h: 44, a: 52, w: 50 }
+    { h: 44, a: 52, w: 50 },
+    { grey: true, h: 0, a: 0, w: 0 }
   ];
   var schemeIndex = 0;
 
@@ -800,18 +807,22 @@
   function applyScheme(index) {
     var scheme = schemes[index % schemes.length];
     var dark = root.classList.contains('dark');
+    var neutral = scheme.grey === true;
+    var muted = !neutral && (index % 2 === 1);
+    var comp = hue(scheme.h, 180);
     setVars({
-      'color-bg': hsl(hue(scheme.h, 8), 16, dark ? 12 : 97),
-      'color-surface': hsl(hue(scheme.h, 3), 10, dark ? 17 : 100),
-      'color-sunken': hsl(hue(scheme.h, 12), 10, dark ? 22 : 95),
-      'color-fg': hsl(hue(scheme.h, 18), 18, dark ? 96 : 11),
-      'color-dim': hsl(hue(scheme.h, 10), 8, dark ? 68 : 40),
-      'color-line': hsl(hue(scheme.h, 5), 10, dark ? 29 : 89),
-      'color-line-strong': hsl(hue(scheme.h, 9), 10, dark ? 38 : 79),
-      'color-brand': hsl(hue(scheme.a, 0), 65, dark ? 70 : 34),
-      'color-on-brand': hsl(hue(scheme.a, 10), 20, dark ? 18 : 98),
-      'color-flag': hsl(hue(scheme.w, 0), 90, dark ? 60 : 54),
-      'color-on-flag': hsl(hue(scheme.c, 10), 55, dark ? 20 : 26)
+      'color-bg': hsl(neutral ? 0 : hue(scheme.h, 8), neutral ? 2 : (muted ? 3 : 16), dark ? 12 : 97),
+      'color-surface': hsl(neutral ? 0 : hue(scheme.h, 3), neutral ? 2 : (muted ? 3 : 10), dark ? 17 : 100),
+      'surface-alt': hsl(neutral ? 0 : comp, neutral ? 2 : (muted ? 3 : 10), dark ? 17 : 100),
+      'color-sunken': hsl(neutral ? 0 : hue(scheme.h, 12), neutral ? 3 : (muted ? 4 : 10), dark ? 22 : 95),
+      'color-fg': hsl(neutral ? 0 : hue(scheme.h, 18), neutral ? 4 : (muted ? 5 : 18), dark ? 96 : 11),
+      'color-dim': hsl(neutral ? 0 : hue(scheme.h, 10), neutral ? 3 : (muted ? 4 : 8), dark ? 68 : 40),
+      'color-line': hsl(neutral ? 0 : hue(scheme.h, 5), neutral ? 3 : (muted ? 4 : 10), dark ? 29 : 89),
+      'color-line-strong': hsl(neutral ? 0 : hue(scheme.h, 9), neutral ? 4 : (muted ? 5 : 10), dark ? 38 : 79),
+      'color-brand': hsl(neutral ? 0 : hue(scheme.a, 0), neutral ? 4 : (muted ? 35 : 65), dark ? 70 : 34),
+      'color-on-brand': hsl(0, 0, dark ? 16 : 98),
+      'color-flag': hsl(neutral ? 0 : hue(scheme.w, 0), neutral ? 6 : (muted ? 38 : 84), dark ? 60 : 54),
+      'color-on-flag': hsl(0, 0, dark ? 18 : 98)
     });
     root.style.colorScheme = dark ? 'dark' : 'light';
   }

@@ -773,7 +773,8 @@
     { h: 18, a: 24, w: 52 },
     { h: 330, a: 336, w: 46 },
     { h: 92, a: 100, w: 48 },
-    { h: 44, a: 52, w: 50 }
+    { h: 44, a: 52, w: 50 },
+    { grey: true, h: 0, a: 0, w: 0 }
   ];
   var schemeIndex = 0;
 
@@ -834,18 +835,21 @@
   function applyScheme(index) {
     var scheme = schemes[index % schemes.length];
     var dark = root.classList.contains('dark');
+    var neutral = scheme.grey === true;
+    var muted = !neutral && (index % 2 === 1);
+    var comp = hue(scheme.h, 180);
     setVars({
-      bg: hsl(hue(scheme.h, 8), 16, dark ? 12 : 97),
-      surface: hsl(hue(scheme.h, 3), 10, dark ? 17 : 100),
-      raised: hsl(hue(scheme.h, 12), 10, dark ? 22 : 95),
-      fg: hsl(hue(scheme.h, 18), 18, dark ? 96 : 11),
-      dim: hsl(hue(scheme.h, 10), 8, dark ? 68 : 40),
-      line: hsl(hue(scheme.h, 5), 10, dark ? 29 : 89),
-      'line-strong': hsl(hue(scheme.h, 9), 10, dark ? 38 : 79),
-      brand: hsl(hue(scheme.a, 0), 65, dark ? 70 : 34),
-      'brand-fg': hsl(hue(scheme.a, 10), 20, dark ? 18 : 98),
-      plate: hsl(hue(scheme.h, 2), 18, dark ? 96 : 18),
-      'plate-fg': hsl(hue(scheme.h, 16), 18, dark ? 16 : 98),
+      bg: hsl(neutral ? 0 : hue(scheme.h, 8), neutral ? 2 : (muted ? 3 : 16), dark ? 12 : 97),
+      surface: hsl(neutral ? 0 : hue(scheme.h, 3), neutral ? 2 : (muted ? 3 : 10), dark ? 17 : 100),
+      raised: hsl(neutral ? 0 : comp, neutral ? 3 : (muted ? 4 : 10), dark ? 22 : 95),
+      fg: hsl(neutral ? 0 : hue(scheme.h, 18), neutral ? 4 : (muted ? 5 : 18), dark ? 96 : 11),
+      dim: hsl(neutral ? 0 : hue(scheme.h, 10), neutral ? 3 : (muted ? 4 : 8), dark ? 68 : 40),
+      line: hsl(neutral ? 0 : hue(scheme.h, 5), neutral ? 3 : (muted ? 4 : 10), dark ? 29 : 89),
+      'line-strong': hsl(neutral ? 0 : hue(scheme.h, 9), neutral ? 4 : (muted ? 5 : 10), dark ? 38 : 79),
+      brand: hsl(neutral ? 0 : hue(scheme.a, 0), neutral ? 4 : (muted ? 35 : 65), dark ? 70 : 34),
+      'brand-fg': hsl(0, 0, dark ? 16 : 98),
+      plate: hsl(neutral ? 0 : hue(scheme.h, 2), neutral ? 3 : (muted ? 4 : 18), dark ? 96 : 18),
+      'plate-fg': hsl(0, 0, dark ? 18 : 98),
       scrim: dark ? (0.38 + ((schemeIndex % 3) * 0.02)) : (0.68 + ((schemeIndex % 3) * 0.02))
     });
     root.style.colorScheme = dark ? 'dark' : 'light';
