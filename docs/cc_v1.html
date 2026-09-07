@@ -762,7 +762,7 @@
       Kasutame küpsiseid, et näha, kust külastajad tulevad — Auto24-st, Instagramist või TikTokist. Statistikaküpsised on valikulised.
     </p>
     <div class="flex shrink-0 gap-2">
-      <button type="button" class="h-9 rounded-[9px] border border-rule px-3 text-[13px] font-medium transition-colors hover:bg-paper">Ainult vajalikud</button>
+      <button id="cookie-decline" type="button" class="h-9 rounded-[9px] border border-rule px-3 text-[13px] font-medium transition-colors hover:bg-paper">Ainult vajalikud</button>
       <button type="button" class="h-9 rounded-[9px] bg-pine px-3 text-[13px] font-semibold text-white transition-colors hover:bg-pinedark">Nõustun</button>
     </div>
   </div>
@@ -773,6 +773,18 @@
   var root = document.documentElement;
   var toggle = document.getElementById('theme-toggle');
   var banner = document.getElementById('cookie-banner');
+  var decline = document.getElementById('cookie-decline');
+  var schemeKey = 'cubcar-ui-scheme-v1';
+  var schemes = [
+    { h: 156, a: 161, w: 44, c: 16 },
+    { h: 204, a: 208, w: 46, c: 18 },
+    { h: 248, a: 252, w: 45, c: 16 },
+    { h: 18, a: 26, w: 52, c: 14 },
+    { h: 332, a: 336, w: 46, c: 16 },
+    { h: 92, a: 104, w: 48, c: 18 },
+    { h: 46, a: 54, w: 50, c: 20 }
+  ];
+  var schemeIndex = 0;
 
   function paint(el) {
     var dark = root.classList.contains('dark');
@@ -807,19 +819,67 @@
     document.querySelectorAll('Ph, ph').forEach(paint);
   }
 
+  function hsl(h, s, l) {
+    return 'hsl(' + ((((h % 360) + 360) % 360)) + ' ' + s + '% ' + l + '%)';
+  }
+
+  function hue(base, offset) {
+    return (((base + offset) % 360) + 360) % 360;
+  }
+
+  function setVars(vars) {
+    for (var key in vars) {
+      if (Object.prototype.hasOwnProperty.call(vars, key)) {
+        root.style.setProperty('--' + key, vars[key]);
+      }
+    }
+  }
+
+  function applyScheme(index) {
+    var scheme = schemes[index % schemes.length];
+    var dark = root.classList.contains('dark');
+    setVars({
+      paper: hsl(hue(scheme.h, 8), 18, dark ? 10 : 95),
+      card: hsl(hue(scheme.h, 3), 10, dark ? 15 : 100),
+      ink: hsl(hue(scheme.h, 18), 18, dark ? 95 : 11),
+      soft: hsl(hue(scheme.h, 12), 8, dark ? 68 : 38),
+      rule: hsl(hue(scheme.h, 5), 10, dark ? 24 : 84),
+      pine: hsl(hue(scheme.a, 0), 55, dark ? 66 : 32),
+      pinedark: hsl(hue(scheme.a, 8), 60, dark ? 26 : 23),
+      amber: hsl(hue(scheme.w, 0), 90, dark ? 58 : 54),
+      clay: hsl(hue(scheme.c, 8), 62, dark ? 60 : 42)
+    });
+    root.style.colorScheme = dark ? 'dark' : 'light';
+  }
+
   function setTheme(dark) {
     root.classList.toggle('dark', dark);
     try {
       localStorage.setItem('cubcar-theme', dark ? 'dark' : 'light');
     } catch (err) {}
     paintAll();
+    applyScheme(schemeIndex);
   }
 
   function hideBanner() {
     if (banner) banner.remove();
   }
 
+  function saveScheme(index) {
+    try {
+      localStorage.setItem(schemeKey, String(index));
+    } catch (err) {}
+  }
+
+  try {
+    var savedScheme = parseInt(localStorage.getItem(schemeKey), 10);
+    if (!isNaN(savedScheme)) {
+      schemeIndex = savedScheme % schemes.length;
+    }
+  } catch (err) {}
+
   paintAll();
+  applyScheme(schemeIndex);
 
   if (toggle) {
     toggle.addEventListener('click', function () {
@@ -827,12 +887,19 @@
     });
   }
 
-  if (banner) {
-    banner.addEventListener('click', function (event) {
-      if (event.target && event.target.closest('button')) {
-        hideBanner();
-      }
+  if (decline) {
+    decline.addEventListener('click', function () {
+      schemeIndex = (schemeIndex + 1) % schemes.length;
+      applyScheme(schemeIndex);
+      saveScheme(schemeIndex);
     });
+  }
+
+  if (banner) {
+    var buttons = banner.querySelectorAll('button');
+    if (buttons[1]) {
+      buttons[1].addEventListener('click', hideBanner);
+    }
   }
 })();
 </script>

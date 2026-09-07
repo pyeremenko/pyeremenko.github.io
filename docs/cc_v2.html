@@ -753,7 +753,7 @@
       Kasutame küpsiseid, et näha, kust külastajad tulevad — Auto24-st, Instagramist või TikTokist. Statistikaküpsised on valikulised.
     </p>
     <div class="flex shrink-0 gap-2">
-      <button type="button" class="h-9 rounded-plate border border-line px-3 text-[13px] font-medium transition-colors hover:bg-muted">Ainult vajalikud</button>
+      <button id="cookie-decline" type="button" class="h-9 rounded-plate border border-line px-3 text-[13px] font-medium transition-colors hover:bg-muted">Ainult vajalikud</button>
       <button type="button" class="h-9 rounded-plate bg-pine px-3 text-[13px] font-medium text-white transition-colors hover:bg-pine-hover">Nõustun</button>
     </div>
   </div>
@@ -765,6 +765,18 @@
   var root = document.documentElement;
   var toggle = document.getElementById('theme-toggle');
   var banner = document.getElementById('cookie-banner');
+  var decline = document.getElementById('cookie-decline');
+  var schemeKey = 'cubcar-ui-scheme-v2';
+  var schemes = [
+    { h: 158, a: 164, w: 44 },
+    { h: 202, a: 208, w: 46 },
+    { h: 248, a: 252, w: 45 },
+    { h: 18, a: 24, w: 52 },
+    { h: 332, a: 336, w: 46 },
+    { h: 92, a: 100, w: 48 },
+    { h: 46, a: 54, w: 50 }
+  ];
+  var schemeIndex = 0;
 
   function paint(el) {
     var dark = root.classList.contains('dark');
@@ -803,16 +815,57 @@
     document.querySelectorAll('ph[grid]').forEach(paint);
   }
 
+  function hsl(h, s, l) {
+    return 'hsl(' + ((((h % 360) + 360) % 360)) + ' ' + s + '% ' + l + '%)';
+  }
+
+  function hue(base, offset) {
+    return (((base + offset) % 360) + 360) % 360;
+  }
+
+  function setVars(vars) {
+    for (var key in vars) {
+      if (Object.prototype.hasOwnProperty.call(vars, key)) {
+        root.style.setProperty('--' + key, vars[key]);
+      }
+    }
+  }
+
+  function applyScheme(index) {
+    var scheme = schemes[index % schemes.length];
+    var dark = root.classList.contains('dark');
+    setVars({
+      paper: hsl(hue(scheme.h, 8), 18, dark ? 11 : 97),
+      card: hsl(hue(scheme.h, 3), 10, dark ? 15 : 100),
+      muted: hsl(hue(scheme.h, 6), 10, dark ? 18 : 95),
+      'muted-foreground': hsl(hue(scheme.h, 14), 8, dark ? 68 : 40),
+      line: hsl(hue(scheme.h, 5), 10, dark ? 28 : 89),
+      pine: hsl(hue(scheme.a, 0), 60, dark ? 68 : 34),
+      'pine-hover': hsl(hue(scheme.a, 8), 62, dark ? 60 : 29),
+      signal: hsl(hue(scheme.w, 0), 90, dark ? 60 : 54),
+      'signal-ink': hsl(hue(scheme.w, 10), 55, dark ? 20 : 26),
+      ink: hsl(hue(scheme.h, 18), 18, dark ? 96 : 12)
+    });
+    root.style.colorScheme = dark ? 'dark' : 'light';
+  }
+
   function setTheme(dark) {
     root.classList.toggle('dark', dark);
     try {
       localStorage.setItem('cubcar-theme', dark ? 'dark' : 'light');
     } catch (err) {}
     paintAll();
+    applyScheme(schemeIndex);
   }
 
   function hideBanner() {
     if (banner) banner.remove();
+  }
+
+  function saveScheme(index) {
+    try {
+      localStorage.setItem(schemeKey, String(index));
+    } catch (err) {}
   }
 
   var saved = null;
@@ -820,11 +873,19 @@
     saved = localStorage.getItem('cubcar-theme');
   } catch (err) {}
 
+  try {
+    var savedScheme = parseInt(localStorage.getItem(schemeKey), 10);
+    if (!isNaN(savedScheme)) {
+      schemeIndex = savedScheme % schemes.length;
+    }
+  } catch (err) {}
+
   if (saved === 'dark' || (saved !== 'light' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
     root.classList.add('dark');
   }
 
   paintAll();
+  applyScheme(schemeIndex);
 
   if (toggle) {
     toggle.addEventListener('click', function () {
@@ -832,12 +893,19 @@
     });
   }
 
-  if (banner) {
-    banner.addEventListener('click', function (event) {
-      if (event.target && event.target.closest('button')) {
-        hideBanner();
-      }
+  if (decline) {
+    decline.addEventListener('click', function () {
+      schemeIndex = (schemeIndex + 1) % schemes.length;
+      applyScheme(schemeIndex);
+      saveScheme(schemeIndex);
     });
+  }
+
+  if (banner) {
+    var buttons = banner.querySelectorAll('button');
+    if (buttons[1]) {
+      buttons[1].addEventListener('click', hideBanner);
+    }
   }
 })();
 </script>

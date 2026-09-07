@@ -753,7 +753,7 @@
       Kasutame küpsiseid, et näha, kust külastajad tulevad — Auto24-st, Instagramist või TikTokist. Statistikaküpsised on valikulised.
     </p>
     <div class="flex shrink-0 gap-2">
-      <button type="button" class="h-9 rounded-plate border border-line px-3 text-[13px] font-medium transition-colors hover:bg-sunken">Ainult vajalikud</button>
+      <button id="cookie-decline" type="button" class="h-9 rounded-plate border border-line px-3 text-[13px] font-medium transition-colors hover:bg-sunken">Ainult vajalikud</button>
       <button type="button" class="h-9 rounded-plate bg-brand px-3 text-[13px] font-medium text-on-brand transition-opacity hover:opacity-90">Nõustun</button>
     </div>
   </div>
@@ -764,21 +764,95 @@
 (function () {
   var root = document.documentElement;
   var banner = document.getElementById('cookie-banner');
+  var decline = document.getElementById('cookie-decline');
+  var schemeKey = 'cubcar-ui-scheme-v4';
+  var schemes = [
+    { h: 170, a: 166, w: 46 },
+    { h: 210, a: 206, w: 48 },
+    { h: 255, a: 250, w: 45 },
+    { h: 18, a: 24, w: 52 },
+    { h: 330, a: 336, w: 46 },
+    { h: 92, a: 100, w: 48 },
+    { h: 44, a: 52, w: 50 }
+  ];
+  var schemeIndex = 0;
 
   // follow the OS preference on load; the button overrides for this session
   if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
     root.classList.add('dark');
   }
+  function hsl(h, s, l) {
+    return 'hsl(' + ((((h % 360) + 360) % 360)) + ' ' + s + '% ' + l + '%)';
+  }
+
+  function hue(base, offset) {
+    return (((base + offset) % 360) + 360) % 360;
+  }
+
+  function setVars(vars) {
+    for (var key in vars) {
+      if (Object.prototype.hasOwnProperty.call(vars, key)) {
+        root.style.setProperty('--' + key, vars[key]);
+      }
+    }
+  }
+
+  function applyScheme(index) {
+    var scheme = schemes[index % schemes.length];
+    var dark = root.classList.contains('dark');
+    setVars({
+      'color-bg': hsl(hue(scheme.h, 8), 16, dark ? 12 : 97),
+      'color-surface': hsl(hue(scheme.h, 3), 10, dark ? 17 : 100),
+      'color-sunken': hsl(hue(scheme.h, 12), 10, dark ? 22 : 95),
+      'color-fg': hsl(hue(scheme.h, 18), 18, dark ? 96 : 11),
+      'color-dim': hsl(hue(scheme.h, 10), 8, dark ? 68 : 40),
+      'color-line': hsl(hue(scheme.h, 5), 10, dark ? 29 : 89),
+      'color-line-strong': hsl(hue(scheme.h, 9), 10, dark ? 38 : 79),
+      'color-brand': hsl(hue(scheme.a, 0), 65, dark ? 70 : 34),
+      'color-on-brand': hsl(hue(scheme.a, 10), 20, dark ? 18 : 98),
+      'color-flag': hsl(hue(scheme.w, 0), 90, dark ? 60 : 54),
+      'color-on-flag': hsl(hue(scheme.c, 10), 55, dark ? 20 : 26)
+    });
+    root.style.colorScheme = dark ? 'dark' : 'light';
+  }
+
+  function hideBanner() {
+    if (banner) banner.remove();
+  }
+
+  function saveScheme(index) {
+    try {
+      localStorage.setItem(schemeKey, String(index));
+    } catch (err) {}
+  }
+
+  try {
+    var savedScheme = parseInt(localStorage.getItem(schemeKey), 10);
+    if (!isNaN(savedScheme)) {
+      schemeIndex = savedScheme % schemes.length;
+    }
+  } catch (err) {}
+
+  applyScheme(schemeIndex);
+
   document.getElementById('theme-toggle').addEventListener('click', function () {
     root.classList.toggle('dark');
+    applyScheme(schemeIndex);
   });
 
-  if (banner) {
-    banner.addEventListener('click', function (event) {
-      if (event.target && event.target.closest('button')) {
-        banner.remove();
-      }
+  if (decline) {
+    decline.addEventListener('click', function () {
+      schemeIndex = (schemeIndex + 1) % schemes.length;
+      applyScheme(schemeIndex);
+      saveScheme(schemeIndex);
     });
+  }
+
+  if (banner) {
+    var buttons = banner.querySelectorAll('button');
+    if (buttons[1]) {
+      buttons[1].addEventListener('click', hideBanner);
+    }
   }
 
   function paint(el) {
