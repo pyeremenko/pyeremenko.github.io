@@ -224,7 +224,7 @@
 </section>
 
 <!-- ── Trade-in + commission ──────────────────────────────────────────── -->
-<section id="vahetus" class="mt-12 border-y border-line bg-muted/50 py-14 sm:mt-16">
+<section id="vahetus" class="mt-0 border-y border-line bg-muted/50 py-14 sm:mt-16">
   <div class="mx-auto max-w-6xl px-5">
     <div class="grid gap-4 lg:grid-cols-2">
 
@@ -813,17 +813,7 @@
 
   function hideBanner() {
     if (banner) banner.remove();
-    try {
-      localStorage.setItem('cubcar-cookies', 'dismissed');
-    } catch (err) {}
   }
-
-  try {
-    if (localStorage.getItem('cubcar-cookies') === 'dismissed' && banner) {
-      banner.remove();
-      banner = null;
-    }
-  } catch (err) {}
 
   var saved = null;
   try {

@@ -237,12 +237,11 @@
     <div class="grid gap-4 lg:grid-cols-2">
 
       <div class="rounded-plate border border-line bg-surface p-6">
-        <span class="nums inline-block rounded-plate bg-plate px-2 py-1 text-[13px] font-bold leading-none text-plate-fg">A</span>
-        <h3 class="mt-4 text-xl font-semibold tracking-tight">Toome su vana auto uue vastu</h3>
+        <h3 class="mt-0 text-xl font-semibold tracking-tight">Toome su vana auto uue vastu</h3>
         <p class="mt-2 max-w-md text-[15px] leading-relaxed text-dim">
           Saada paar pilti ja põhiandmed. Vastame hinnapakkumisega tavaliselt sama päeva jooksul.
         </p>
-        <ul class="mt-4 space-y-2 text-[14px]">
+        <ul class="mt-0 space-y-2 text-[14px]">
           <li class="flex items-start gap-2"><svg class="mt-0.5 size-4 shrink-0 text-brand" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><use href="#i-check"/></svg>Hindame ka siis, kui meilt midagi ei osta</li>
           <li class="flex items-start gap-2"><svg class="mt-0.5 size-4 shrink-0 text-brand" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><use href="#i-check"/></svg>Vormistame ümber kohapeal</li>
         </ul>
@@ -250,7 +249,6 @@
       </div>
 
       <div class="rounded-plate border border-line bg-surface p-6">
-        <span class="nums inline-block rounded-plate bg-plate px-2 py-1 text-[13px] font-bold leading-none text-plate-fg">B</span>
         <h3 class="mt-4 text-xl font-semibold tracking-tight">Müü oma auto meie platsil</h3>
         <p class="mt-2 max-w-md text-[15px] leading-relaxed text-dim">
           Komisjonimüük: sinu auto seisab meie platsil, meie teeme pildid ja kuulutused ning suhtleme ostjatega.
@@ -807,17 +805,7 @@
 
   function hideBanner() {
     if (banner) banner.remove();
-    try {
-      localStorage.setItem('cubcar-cookies', 'dismissed');
-    } catch (err) {}
   }
-
-  try {
-    if (localStorage.getItem('cubcar-cookies') === 'dismissed' && banner) {
-      banner.remove();
-      banner = null;
-    }
-  } catch (err) {}
 
   // Follow the OS preference on first load; the toggle overrides it in memory.
   if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
