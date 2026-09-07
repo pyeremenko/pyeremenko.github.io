@@ -752,6 +752,10 @@
     <p class="flex-1 text-[13px] leading-relaxed text-dim">
       Kasutame küpsiseid, et näha, kust külastajad tulevad — Auto24-st, Instagramist või TikTokist. Statistikaküpsised on valikulised.
     </p>
+    <div class="flex items-center gap-2 text-[12px] leading-tight text-dim">
+      <span class="uppercase tracking-[.12em]">Skeem</span>
+      <span id="cookie-scheme-name" class="font-medium text-fg"></span>
+    </div>
     <div class="flex shrink-0 gap-2">
       <button id="cookie-decline" type="button" class="h-9 rounded-plate border border-line-strong px-3 text-[13px] font-medium transition-colors hover:bg-raised">Ainult vajalikud</button>
       <button type="button" class="h-9 rounded-plate bg-brand px-3 text-[13px] font-semibold text-brand-fg transition-transform hover:-translate-y-px">Nõustun</button>
@@ -765,16 +769,18 @@
   var root = document.documentElement;
   var banner = document.getElementById('cookie-banner');
   var decline = document.getElementById('cookie-decline');
+  var schemeName = document.getElementById('cookie-scheme-name');
   var schemeKey = 'cubcar-ui-scheme-v3';
   var schemes = [
-    { h: 170, a: 166, w: 46 },
-    { h: 210, a: 206, w: 48 },
-    { h: 255, a: 250, w: 45 },
-    { h: 18, a: 24, w: 52 },
-    { h: 330, a: 336, w: 46 },
-    { h: 92, a: 100, w: 48 },
-    { h: 44, a: 52, w: 50 },
-    { grey: true, h: 0, a: 0, w: 0 }
+    { name: 'Mänd', h: 170, a: 166, w: 46 },
+    { name: 'Teras', h: 210, a: 206, w: 48 },
+    { name: 'Indigo', h: 255, a: 250, w: 45 },
+    { name: 'Messing', h: 18, a: 24, w: 52 },
+    { name: 'Marja', h: 330, a: 336, w: 46 },
+    { name: 'Oliiv', h: 92, a: 100, w: 48 },
+    { name: 'Rooste', h: 44, a: 52, w: 50 },
+    { name: 'Grafiit', grey: true, h: 0, a: 0, w: 0 },
+    { name: 'Sinakas teras / messing', h: 214, a: 218, w: 40 }
   ];
   var schemeIndex = 0;
 
@@ -832,6 +838,12 @@
     }
   }
 
+  function updateSchemeName(scheme) {
+    if (schemeName) {
+      schemeName.textContent = scheme && scheme.name ? scheme.name : '';
+    }
+  }
+
   function applyScheme(index) {
     var scheme = schemes[index % schemes.length];
     var dark = root.classList.contains('dark');
@@ -852,6 +864,7 @@
       'plate-fg': hsl(0, 0, dark ? 18 : 98),
       scrim: dark ? (0.38 + ((schemeIndex % 3) * 0.02)) : (0.68 + ((schemeIndex % 3) * 0.02))
     });
+    updateSchemeName(scheme);
     root.style.colorScheme = dark ? 'dark' : 'light';
   }
 

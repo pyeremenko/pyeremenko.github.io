@@ -763,6 +763,10 @@
     <p class="flex-1 text-[13px] leading-relaxed text-soft">
       Kasutame küpsiseid, et näha, kust külastajad tulevad — Auto24-st, Instagramist või TikTokist. Statistikaküpsised on valikulised.
     </p>
+    <div class="flex items-center gap-2 text-[12px] leading-tight text-soft">
+      <span class="uppercase tracking-[.12em]">Skeem</span>
+      <span id="cookie-scheme-name" class="font-medium text-ink"></span>
+    </div>
     <div class="flex shrink-0 gap-2">
       <button id="cookie-decline" type="button" class="h-9 rounded-[9px] border border-rule px-3 text-[13px] font-medium transition-colors hover:bg-paper">Ainult vajalikud</button>
       <button type="button" class="h-9 rounded-[9px] bg-pine px-3 text-[13px] font-semibold text-white transition-colors hover:bg-pinedark">Nõustun</button>
@@ -776,16 +780,18 @@
   var toggle = document.getElementById('theme-toggle');
   var banner = document.getElementById('cookie-banner');
   var decline = document.getElementById('cookie-decline');
+  var schemeName = document.getElementById('cookie-scheme-name');
   var schemeKey = 'cubcar-ui-scheme-v1';
   var schemes = [
-    { h: 156, a: 161, w: 44, c: 16 },
-    { h: 204, a: 208, w: 46, c: 18 },
-    { h: 248, a: 252, w: 45, c: 16 },
-    { h: 18, a: 26, w: 52, c: 14 },
-    { h: 332, a: 336, w: 46, c: 16 },
-    { h: 92, a: 104, w: 48, c: 18 },
-    { h: 46, a: 54, w: 50, c: 20 },
-    { grey: true, h: 0, a: 0, w: 0, c: 0 }
+    { name: 'Mänd', h: 156, a: 161, w: 44, c: 16 },
+    { name: 'Teras', h: 204, a: 208, w: 46, c: 18 },
+    { name: 'Indigo', h: 248, a: 252, w: 45, c: 16 },
+    { name: 'Messing', h: 18, a: 26, w: 52, c: 14 },
+    { name: 'Marja', h: 332, a: 336, w: 46, c: 16 },
+    { name: 'Oliiv', h: 92, a: 104, w: 48, c: 18 },
+    { name: 'Rooste', h: 46, a: 54, w: 50, c: 20 },
+    { name: 'Grafiit', grey: true, h: 0, a: 0, w: 0, c: 0 },
+    { name: 'Sinakas teras / messing', h: 214, a: 218, w: 40, c: 24 }
   ];
   var schemeIndex = 0;
 
@@ -838,6 +844,12 @@
     }
   }
 
+  function updateSchemeName(scheme) {
+    if (schemeName) {
+      schemeName.textContent = scheme && scheme.name ? scheme.name : '';
+    }
+  }
+
   function applyScheme(index) {
     var scheme = schemes[index % schemes.length];
     var dark = root.classList.contains('dark');
@@ -856,6 +868,7 @@
       amber: hsl(neutral ? 0 : comp, neutral ? 6 : (muted ? 28 : 78), dark ? 58 : 54),
       clay: hsl(neutral ? 0 : hue(comp, 10), neutral ? 5 : (muted ? 20 : 46), dark ? 60 : 42)
     });
+    updateSchemeName(scheme);
     root.style.colorScheme = dark ? 'dark' : 'light';
   }
 
