@@ -1,5 +1,4 @@
-window.CC_LANG = "et";
-window.CC_TRANSLATIONS = {
+window.CC_TRANSLATIONS_ET = {
   "k_width_device_width_initial_scale_1": "width=device-width, initial-scale=1",
   "k_light_dark": "light dark",
   "k_cubcar_autod_kaubikud_atv_d": "CubCar — autod, kaubikud, ATV-d",
