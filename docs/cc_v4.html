@@ -193,14 +193,14 @@
         <div class="trust-fg nums text-[28px] font-bold leading-none tracking-tight">k_n_1400</div>
         <div class="trust-muted mt-2 text-[13px] leading-snug">k_muudud_soidukit</div>
       </div>
-      <div class="border-t border-white/15 px-1 pt-6 sm:border-l sm:border-t-0 sm:pt-0">
-        <div class="trust-fg ml-4 nums flex items-center gap-1.5 text-[28px] font-bold leading-none tracking-tight">
+      <div class="border-white/15 px-1 pt-6 sm:border-l sm:border-t-0 sm:pt-0">
+        <div class="trust-fg sm:ml-4 ml-0 nums flex items-center gap-1.5 text-[28px] font-bold leading-none tracking-tight">
           k_n_4_8
           <svg class="trust-accent size-4" fill="currentColor" viewbox="0 0 24 24"><use href="#i-star"></use></svg>
         </div>
-        <div class="trust-muted ml-4 mt-2 text-[13px] leading-snug">k_google_260_hinnangut</div>
+        <div class="trust-muted sm:ml-4 ml-0 mt-2 text-[13px] leading-snug">k_google_260_hinnangut</div>
       </div>
-      <div class="border-l border-t border-white/15 px-5 pt-6 sm:border-t-0 sm:pt-0">
+      <div class="border-l border-white/15 px-5 pt-6 sm:border-t-0 sm:pt-0">
         <div class="trust-fg nums text-[28px] font-bold leading-none tracking-tight">k_n_12_kuud</div>
         <div class="trust-muted mt-2 text-[13px] leading-snug">k_garantii_valitud_autodele</div>
       </div>
@@ -837,7 +837,7 @@
     var neutral = scheme.grey === true;
     var muted = !neutral && (index % 2 === 1);
     var comp = hue(scheme.h, 180);
-    var trustDark = (index % schemes.length) === 5;
+    var trustDark = false;
     setVars({
       'color-bg': hsl(neutral ? 0 : hue(scheme.h, 8), neutral ? 2 : (muted ? 3 : 16), dark ? 12 : 97),
       'color-surface': hsl(neutral ? 0 : hue(scheme.h, 3), neutral ? 2 : (muted ? 3 : 10), dark ? 17 : 100),
@@ -853,7 +853,7 @@
       'color-on-flag': hsl(0, 0, dark ? 18 : 98),
       'trust-strip-fg': trustDark ? 'rgb(0 0 0)' : 'rgb(255 255 255)',
       'trust-strip-muted': trustDark ? 'rgb(0 0 0 / 0.72)' : 'rgb(255 255 255 / 0.60)',
-      'trust-strip-accent': trustDark ? 'rgb(0 0 0)' : 'var(--color-flag)'
+      'trust-strip-accent': 'rgb(255 255 255)'
     });
     setTrustStripColors(trustDark);
     updateSchemeName(scheme);
