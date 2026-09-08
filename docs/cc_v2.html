@@ -147,12 +147,31 @@
         <span class="sm:hidden">k_helista</span>
       </a>
 
-      <button class="grid size-9 place-items-center rounded-plate border border-line bg-card lg:hidden" aria-label="k_menuu">
+      <button type="button" data-mobile-menu-toggle aria-controls="mobile-menu-v2" aria-expanded="false" class="grid size-9 place-items-center rounded-plate border border-line bg-card lg:hidden" aria-label="k_menuu">
         <svg class="size-4" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" viewbox="0 0 24 24"><use href="#i-menu"></use></svg>
       </button>
     </div>
   </div>
 </header>
+
+<div id="mobile-menu-v2" data-mobile-menu-panel class="hidden border-b border-line bg-card lg:hidden" aria-hidden="true">
+  <div class="mx-auto max-w-6xl px-5 py-4">
+    <nav class="grid gap-1 text-[15px]">
+      <a class="rounded-plate px-3 py-2 text-muted-foreground transition-colors hover:bg-muted hover:text-ink" href="#soidukid">k_soidukid</a>
+      <a class="rounded-plate px-3 py-2 text-muted-foreground transition-colors hover:bg-muted hover:text-ink" href="#vahetus">k_vahetus</a>
+      <a class="rounded-plate px-3 py-2 text-muted-foreground transition-colors hover:bg-muted hover:text-ink" href="#vahetus">k_komisjonimuuk</a>
+      <a class="rounded-plate px-3 py-2 text-muted-foreground transition-colors hover:bg-muted hover:text-ink" href="#blogi">k_blogi</a>
+      <a class="rounded-plate px-3 py-2 text-muted-foreground transition-colors hover:bg-muted hover:text-ink" href="#kontakt">k_kontakt</a>
+    </nav>
+
+    <div class="mt-4 flex flex-wrap gap-2 text-[13px]">
+      <a href="cc_v2.html?lang=et" data-lang-switch="et" class="rounded-[3px] border border-line px-2.5 py-1 text-muted-foreground transition-colors hover:text-ink">k_et</a>
+      <a href="cc_v2.html?lang=ru" data-lang-switch="ru" class="rounded-[3px] border border-line px-2.5 py-1 text-muted-foreground transition-colors hover:text-ink">k_ru</a>
+      <span aria-disabled="true" class="rounded-[3px] border border-line px-2.5 py-1 text-muted-foreground/50">k_en</span>
+      <span aria-disabled="true" class="rounded-[3px] border border-line px-2.5 py-1 text-muted-foreground/50">k_fi</span>
+    </div>
+  </div>
+</div>
 
 <!-- ── Hero ───────────────────────────────────────────────────────────── -->
 <section class="relative pb-24 sm:pb-20">

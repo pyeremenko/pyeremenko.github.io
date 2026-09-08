@@ -834,7 +834,7 @@
     var neutral = scheme.grey === true;
     var muted = !neutral && (index % 2 === 1);
     var comp = hue(scheme.h, 180);
-    var trustDark = (index % schemes.length) === 5;
+    var trustDark = false;
     setVars({
       paper: hsl(neutral ? 0 : hue(scheme.h, 8), neutral ? 2 : (muted ? 4 : 18), dark ? 10 : 95),
       card: hsl(neutral ? 0 : hue(scheme.h, 3), neutral ? 2 : (muted ? 3 : 10), dark ? 15 : 100),
@@ -848,7 +848,7 @@
       clay: hsl(neutral ? 0 : hue(comp, 10), neutral ? 5 : (muted ? 20 : 46), dark ? 60 : 42),
       'trust-strip-fg': trustDark ? 'rgb(0 0 0)' : 'rgb(255 255 255)',
       'trust-strip-muted': trustDark ? 'rgb(0 0 0 / 0.72)' : 'rgb(255 255 255 / 0.60)',
-      'trust-strip-accent': trustDark ? 'rgb(0 0 0)' : 'var(--amber)'
+      'trust-strip-accent': 'rgb(255 255 255)'
     });
     setTrustStripColors(trustDark);
     updateSchemeName(scheme);
