@@ -7,8 +7,8 @@
   };
 
   var replacements = [
-    ['Plats Lasnamäel, avatud E–L', 'Площадка в Ласнамяэ, открыты Пн–Сб'],
-    ['Plats Lasnamäel, avatud kuus päeva nädalas', 'Площадка в Ласнамяэ, открыты шесть дней в неделю'],
+    ['Plats Tallinnas, avatud E–L', 'Площадка в Таллинне, открыты Пн–Сб'],
+    ['Plats Tallinnas, avatud kuus päeva nädalas', 'Площадка в Таллинне, открыты шесть дней в неделю'],
     ['Kogu ladu ühel lehel', 'Весь склад на одной странице'],
     ['Ei mingit ilustatud vitriini. Siin on kõik sõiduautod, kaubikud ja ATV-d, mis meil täna platsil seisavad, koos hindade ja põhiandmetega.', 'Без витринной красоты. Здесь собраны все легковые авто, фургоны и ATV, которые сегодня стоят на площадке, с ценами и основными данными.'],
     ['Ei mingit ilustatud vitriini. Siin on kõik sõiduautod, kaubikud ja ATV-d, mis meil täna platsil seisavad — koos hindade, läbisõidu ja teadaolevate vigadega.', 'Без витринной красоты. Здесь собраны все легковые авто, фургоны и ATV, которые сегодня стоят на площадке, вместе с ценами, пробегом и известными недостатками.'],
@@ -88,7 +88,7 @@
     ['kaubikut', 'фургонов'],
     ['lisandus sel nädalal', 'добавилось на этой неделе'],
     ['Külastajad tulevad — Auto24-st, Instagramist või TikTokist. Statistikaküpsised on valikulised.', 'К нам приходят из Auto24, Instagram и TikTok. Статистические cookies необязательны.'],
-    ['Kasutame küpsiseid, et näha, kust külastajad tulevad — Auto24-st, Instagramist või TikTokist. Statistikaküpsised on valikulised.', 'Мы используем cookies, чтобы понимать, откуда приходят посетители — из Auto24, Instagram или TikTok. Статистические cookies необязательны.'],
+    ['Kasutame küpsiseid, et näha, kust külastajad tulevad — Auto24-st, Instagramist või TikTokist. Statistikaküpsised on valikulised.', 'Мы используем cookies, чтобы понимать, как лучше помочь нашим клиентам. Статистические cookies необязательны.'],
     ['Tegutseme Tallinnas alates 2015. aastast. Kogenud meeskond, läbipaistev pakkumine ja plats, kus kõik autod on päriselt olemas.', 'Работаем в Таллинне с 2015 года. Опытная команда, понятные условия и площадка, где все автомобили действительно есть в наличии.'],
     ['Sõiduautod, kaubikud ja ATV-d. Iga masin käib enne platsile jõudmist meie mehaaniku käest läbi ja teadaolevad vead on kuulutuses kirjas.', 'Легковые авто, фургоны и ATV. Каждая машина проходит проверку у нашего механика до выхода на площадку, а известные недостатки указаны в объявлении.'],
     ['Sõiduautod, kaubikud ja ATV-d. Ostame, müüme ja võtame komisjoni.', 'Легковые авто, фургоны и ATV. Покупаем, продаём и принимаем на комиссию.'],
@@ -117,6 +117,9 @@
     for (var i = 0; i < replacements.length; i++) {
       out = out.split(replacements[i][0]).join(replacements[i][1]);
     }
+    out = out.replace(/Ei mingit ilustatud vitriini\.\s*Siin on kõik sõiduautod, kaubikud ja ATV(?:-d)?,\s*mis meil täna platsil seisavad, koos hindade ja põhiandmetega\./g, 'Никакой витринной показухи. Здесь собраны все легковые авто, фургоны и ATV, которые сегодня стоят на площадке, с ценами и основными данными.');
+    out = out.replace(/2019,\s*148 200 km,\s*automaat\.\s*Üks selge näide sellest, mis meil praegu platsil on\./g, '2019, 148 200 км, автомат. На нашей площадке вы сможете найти еще больше отличных вариантов.');
+    out = out.replace(/Saada paar pilti ja läbisõit\.\s*Vastame tavaliselt sama päeva jooksul\s*ning ütleme kohe, kas võtame vahetusse või paneme komisjonimüüki\./g, 'Пришлите пару фото и пробег. Обычно отвечаем в тот же день и сразу скажем, забираем в трейд-ин или ставим на комиссию.');
     out = out.replace(/E–R/g, 'Пн–Пт');
     out = out.replace(/E–L/g, 'Пн–Сб');
     out = out.replace(/P suletud/g, 'Вс закрыто');
