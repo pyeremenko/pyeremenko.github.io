@@ -556,27 +556,27 @@
 </section>
 
 <!-- ── Trust strip ────────────────────────────────────────────────────── -->
-<section class="border-y border-line bg-pine py-10 text-white">
+<section class="trust-strip border-y border-line bg-pine py-10 text-white">
   <div class="mx-auto grid max-w-6xl gap-6 px-5 sm:grid-cols-3">
     <div class="flex gap-3">
-      <svg class="mt-0.5 size-5 shrink-0 text-signal" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><use href="#i-shield"/></svg>
+      <svg class="trust-accent mt-0.5 size-5 shrink-0 text-signal" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><use href="#i-shield"/></svg>
       <div>
-        <div class="text-[15px] font-semibold">Ülevaatus tehtud enne müüki</div>
-        <p class="mt-1 text-[14px] leading-relaxed text-white/70">Iga auto käib enne platsile jõudmist meie mehaaniku käest läbi.</p>
+        <div class="trust-fg text-[15px] font-semibold">Ülevaatus tehtud enne müüki</div>
+        <p class="trust-muted mt-1 text-[14px] leading-relaxed">Iga auto käib enne platsile jõudmist meie mehaaniku käest läbi.</p>
       </div>
     </div>
     <div class="flex gap-3">
-      <svg class="mt-0.5 size-5 shrink-0 text-signal" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><use href="#i-tag"/></svg>
+      <svg class="trust-accent mt-0.5 size-5 shrink-0 text-signal" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><use href="#i-tag"/></svg>
       <div>
-        <div class="text-[15px] font-semibold">Aus ajalugu</div>
-        <p class="mt-1 text-[14px] leading-relaxed text-white/70">Näitame läbisõidu, remondiajaloo ja teadaolevad vead kuulutuses ära.</p>
+        <div class="trust-fg text-[15px] font-semibold">Aus ajalugu</div>
+        <p class="trust-muted mt-1 text-[14px] leading-relaxed">Näitame läbisõidu, remondiajaloo ja teadaolevad vead kuulutuses ära.</p>
       </div>
     </div>
     <div class="flex gap-3">
-      <svg class="mt-0.5 size-5 shrink-0 text-signal" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><use href="#i-clock"/></svg>
+      <svg class="trust-accent mt-0.5 size-5 shrink-0 text-signal" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><use href="#i-clock"/></svg>
       <div>
-        <div class="text-[15px] font-semibold">Vastame sama päeva jooksul</div>
-        <p class="mt-1 text-[14px] leading-relaxed text-white/70">Helista, kirjuta või jäta soov — võtame ise ühendust.</p>
+        <div class="trust-fg text-[15px] font-semibold">Vastame sama päeva jooksul</div>
+        <p class="trust-muted mt-1 text-[14px] leading-relaxed">Helista, kirjuta või jäta soov — võtame ise ühendust.</p>
       </div>
     </div>
   </div>
@@ -844,12 +844,28 @@
     }
   }
 
+  function setTrustStripColors(trustDark) {
+    document.querySelectorAll('.trust-strip .trust-fg').forEach(function (el) {
+      if (trustDark) el.style.setProperty('color', 'rgb(0 0 0)', 'important');
+      else el.style.removeProperty('color');
+    });
+    document.querySelectorAll('.trust-strip .trust-muted').forEach(function (el) {
+      if (trustDark) el.style.setProperty('color', 'rgb(0 0 0 / 0.72)', 'important');
+      else el.style.removeProperty('color');
+    });
+    document.querySelectorAll('.trust-strip .trust-accent').forEach(function (el) {
+      if (trustDark) el.style.setProperty('color', 'rgb(0 0 0)', 'important');
+      else el.style.removeProperty('color');
+    });
+  }
+
   function applyScheme(index) {
     var scheme = schemes[index % schemes.length];
     var dark = root.classList.contains('dark');
     var neutral = scheme.grey === true;
     var muted = !neutral && (index % 2 === 1);
     var comp = hue(scheme.h, 180);
+    var trustDark = true || (index % schemes.length) === 5;
     setVars({
       paper: hsl(neutral ? 0 : hue(scheme.h, 8), neutral ? 2 : (muted ? 4 : 18), dark ? 11 : 97),
       card: hsl(neutral ? 0 : hue(scheme.h, 3), neutral ? 2 : (muted ? 3 : 10), dark ? 15 : 100),
@@ -862,6 +878,7 @@
       'signal-ink': hsl(0, 0, dark ? 20 : 12),
       ink: hsl(neutral ? 0 : hue(scheme.h, 18), neutral ? 4 : (muted ? 6 : 18), dark ? 96 : 12)
     });
+    setTrustStripColors(trustDark);
     updateSchemeName(scheme);
     root.style.colorScheme = dark ? 'dark' : 'light';
   }

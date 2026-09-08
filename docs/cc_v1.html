@@ -99,6 +99,9 @@
 
   /* spec grid used on listing cards — real tabular data, so it gets tabular figures */
   .spec { font-variant-numeric: tabular-nums; }
+  .trust-strip .trust-fg { color: var(--trust-strip-fg) !important; }
+  .trust-strip .trust-muted { color: var(--trust-strip-muted) !important; }
+  .trust-strip .trust-accent { color: var(--trust-strip-accent) !important; }
 </style>
 
 <script>
@@ -216,22 +219,22 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-2 gap-px overflow-hidden rounded-[18px] border border-white/12 bg-white/10 backdrop-blur-sm sm:grid-cols-4">
+      <div class="trust-strip grid grid-cols-2 gap-px overflow-hidden rounded-[18px] border border-white/12 bg-white/10 backdrop-blur-sm sm:grid-cols-4">
         <div class="px-4 py-4">
-          <div class="font-mono text-[30px] font-bold leading-none tracking-tight text-white">34</div>
-          <div class="mt-1 text-[13px] leading-tight text-white/60">sõiduautot</div>
+          <div class="trust-fg font-mono text-[30px] font-bold leading-none tracking-tight">34</div>
+          <div class="trust-muted mt-1 text-[13px] leading-tight">sõiduautot</div>
         </div>
         <div class="border-l border-white/12 px-4 py-4">
-          <div class="font-mono text-[30px] font-bold leading-none tracking-tight text-white">11</div>
-          <div class="mt-1 text-[13px] leading-tight text-white/60">kaubikut</div>
+          <div class="trust-fg font-mono text-[30px] font-bold leading-none tracking-tight">11</div>
+          <div class="trust-muted mt-1 text-[13px] leading-tight">kaubikut</div>
         </div>
         <div class="border-t border-white/12 px-4 py-4 sm:border-l sm:border-t-0">
-          <div class="font-mono text-[30px] font-bold leading-none tracking-tight text-white">7</div>
-          <div class="mt-1 text-[13px] leading-tight text-white/60">ATV-d</div>
+          <div class="trust-fg font-mono text-[30px] font-bold leading-none tracking-tight">7</div>
+          <div class="trust-muted mt-1 text-[13px] leading-tight">ATV-d</div>
         </div>
         <div class="border-l border-t border-white/12 px-4 py-4 sm:border-t-0">
-          <div class="font-mono text-[30px] font-bold leading-none tracking-tight text-amber">5</div>
-          <div class="mt-1 text-[13px] leading-tight text-white/60">lisandus sel nädalal</div>
+          <div class="trust-accent font-mono text-[30px] font-bold leading-none tracking-tight">5</div>
+          <div class="trust-muted mt-1 text-[13px] leading-tight">lisandus sel nädalal</div>
         </div>
       </div>
     </div>
@@ -849,12 +852,28 @@
     }
   }
 
+  function setTrustStripColors(trustDark) {
+    document.querySelectorAll('.trust-strip .trust-fg').forEach(function (el) {
+      if (trustDark) el.style.setProperty('color', 'rgb(0 0 0)', 'important');
+      else el.style.removeProperty('color');
+    });
+    document.querySelectorAll('.trust-strip .trust-muted').forEach(function (el) {
+      if (trustDark) el.style.setProperty('color', 'rgb(0 0 0 / 0.72)', 'important');
+      else el.style.removeProperty('color');
+    });
+    document.querySelectorAll('.trust-strip .trust-accent').forEach(function (el) {
+      if (trustDark) el.style.setProperty('color', 'rgb(0 0 0)', 'important');
+      else el.style.removeProperty('color');
+    });
+  }
+
   function applyScheme(index) {
     var scheme = schemes[index % schemes.length];
     var dark = root.classList.contains('dark');
     var neutral = scheme.grey === true;
     var muted = !neutral && (index % 2 === 1);
     var comp = hue(scheme.h, 180);
+    var trustDark = (index % schemes.length) === 5;
     setVars({
       paper: hsl(neutral ? 0 : hue(scheme.h, 8), neutral ? 2 : (muted ? 4 : 18), dark ? 10 : 95),
       card: hsl(neutral ? 0 : hue(scheme.h, 3), neutral ? 2 : (muted ? 3 : 10), dark ? 15 : 100),
@@ -865,8 +884,12 @@
       pine: hsl(neutral ? 0 : hue(scheme.a, 0), neutral ? 4 : (muted ? 34 : 55), dark ? 66 : 32),
       pinedark: hsl(neutral ? 0 : hue(scheme.a, 8), neutral ? 5 : (muted ? 38 : 60), dark ? 26 : 23),
       amber: hsl(neutral ? 0 : comp, neutral ? 6 : (muted ? 28 : 78), dark ? 58 : 54),
-      clay: hsl(neutral ? 0 : hue(comp, 10), neutral ? 5 : (muted ? 20 : 46), dark ? 60 : 42)
+      clay: hsl(neutral ? 0 : hue(comp, 10), neutral ? 5 : (muted ? 20 : 46), dark ? 60 : 42),
+      'trust-strip-fg': trustDark ? 'rgb(0 0 0)' : 'rgb(255 255 255)',
+      'trust-strip-muted': trustDark ? 'rgb(0 0 0 / 0.72)' : 'rgb(255 255 255 / 0.60)',
+      'trust-strip-accent': trustDark ? 'rgb(0 0 0)' : 'var(--amber)'
     });
+    setTrustStripColors(trustDark);
     updateSchemeName(scheme);
     root.style.colorScheme = dark ? 'dark' : 'light';
   }

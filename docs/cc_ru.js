@@ -18,6 +18,7 @@
     ['Praegu müügil', 'Сейчас в продаже'],
     ['Uuendatud täna', 'Обновлено сегодня'],
     ['Nädala valik', 'Выбор недели'],
+    ['Ülevaatus tehtud enne müüki', 'Проверка перед продажей'],
     ['Tegutseme Tallinnas alates 2015. aastast', 'Работаем в Таллинне с 2015 года'],
     ['Vahetus', 'Обменять'],
     ['Komisjonimüük', 'Продать нам'],
