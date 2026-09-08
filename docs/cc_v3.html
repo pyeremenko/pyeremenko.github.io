@@ -64,9 +64,9 @@
     body { background: var(--bg); color: var(--fg); -webkit-font-smoothing: antialiased; }
     :focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; border-radius: 2px; }
     .nums { font-variant-numeric: tabular-nums; }
-    .trust-strip .trust-fg { color: var(--trust-strip-fg) !important; }
-    .trust-strip .trust-muted { color: var(--trust-strip-muted) !important; }
-    .trust-strip .trust-accent { color: var(--trust-strip-accent) !important; }
+    .trust-strip .trust-fg { color: inherit !important; }
+    .trust-strip .trust-muted { color: inherit !important; opacity: .76; }
+    .trust-strip .trust-accent { color: inherit !important; }
 
     /* scrim strength follows the theme, so photos aren't over-darkened in dark mode */
     .scrim::after {
@@ -832,18 +832,9 @@
     }
   }
 
-  function setTrustStripColors(trustDark) {
-    document.querySelectorAll('.trust-strip .trust-fg').forEach(function (el) {
-      if (trustDark) el.style.setProperty('color', 'rgb(0 0 0)', 'important');
-      else el.style.removeProperty('color');
-    });
-    document.querySelectorAll('.trust-strip .trust-muted').forEach(function (el) {
-      if (trustDark) el.style.setProperty('color', 'rgb(0 0 0 / 0.72)', 'important');
-      else el.style.removeProperty('color');
-    });
-    document.querySelectorAll('.trust-strip .trust-accent').forEach(function (el) {
-      if (trustDark) el.style.setProperty('color', 'rgb(0 0 0)', 'important');
-      else el.style.removeProperty('color');
+  function setTrustStripColors() {
+    document.querySelectorAll('.trust-strip .trust-fg, .trust-strip .trust-muted, .trust-strip .trust-accent').forEach(function (el) {
+      el.style.removeProperty('color');
     });
   }
 
@@ -853,7 +844,6 @@
     var neutral = scheme.grey === true;
     var muted = !neutral && (index % 2 === 1);
     var comp = hue(scheme.h, 180);
-    var trustDark = (index % schemes.length) === 5;
     setVars({
       bg: hsl(neutral ? 0 : hue(scheme.h, 8), neutral ? 2 : (muted ? 3 : 16), dark ? 12 : 97),
       surface: hsl(neutral ? 0 : hue(scheme.h, 3), neutral ? 2 : (muted ? 3 : 10), dark ? 17 : 100),
@@ -867,11 +857,11 @@
       plate: hsl(neutral ? 0 : hue(scheme.h, 2), neutral ? 3 : (muted ? 4 : 18), dark ? 96 : 18),
       'plate-fg': hsl(0, 0, dark ? 18 : 98),
       scrim: dark ? (0.38 + ((schemeIndex % 3) * 0.02)) : (0.68 + ((schemeIndex % 3) * 0.02)),
-      'trust-strip-fg': trustDark ? 'rgb(0 0 0)' : 'rgb(255 255 255)',
-      'trust-strip-muted': trustDark ? 'rgb(0 0 0 / 0.72)' : 'rgb(255 255 255 / 0.60)',
-      'trust-strip-accent': trustDark ? 'rgb(0 0 0)' : 'var(--color-flag)'
+      'trust-strip-fg': 'inherit',
+      'trust-strip-muted': 'inherit',
+      'trust-strip-accent': 'inherit'
     });
-    setTrustStripColors(trustDark);
+    setTrustStripColors();
     updateSchemeName(scheme);
     root.style.colorScheme = dark ? 'dark' : 'light';
   }
