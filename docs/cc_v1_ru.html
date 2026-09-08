@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="et">
+<html lang="ru">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
-<title>CubCar — autod, kaubikud, ATV-d</title>
+<title>CubCar — автомобили, фургоны и ATV</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -141,8 +141,8 @@
 <div class="bg-pinedark text-white/90 text-[13px]">
   <div class="mx-auto max-w-[1180px] px-5 h-9 flex items-center justify-between gap-4">
     <nav aria-label="Keel" class="flex items-center gap-1">
-      <a href="#" aria-current="page" class="px-2 py-0.5 rounded bg-white/15 text-white">ET</a>
-      <a href="cc_v1_ru.html" class="px-2 py-0.5 rounded hover:bg-white/10">RU</a>
+      <a href="cc_v1.html" class="px-2 py-0.5 rounded hover:bg-white/10">ET</a>
+      <span aria-current="page" class="px-2 py-0.5 rounded bg-white/15 text-white">RU</span>
       <a href="#" class="px-2 py-0.5 rounded hover:bg-white/10">EN</a>
       <a href="#" class="px-2 py-0.5 rounded hover:bg-white/10">FI</a>
     </nav>
@@ -325,7 +325,8 @@
         Sinu auto võib olla osa järgmisest.
       </h2>
       <p class="mt-5 text-white/75 text-[17px] leading-relaxed max-w-[52ch]">
-        Saada paar pilti ja läbisõit. Vastame tavaliselt sama päeva jooksul ning ütleme kohe, kas võtame vahetusse või paneme komisjonimüüki.
+        Saada paar pilti ja läbisõit. Vastame tavaliselt sama päeva jooksul
+        ning ütleme kohe, kas võtame vahetusse või paneme komisjonimüüki.
       </p>
 
       <div class="mt-8 grid sm:grid-cols-2 gap-4">
@@ -759,16 +760,16 @@
 <!-- ══════════ cookie banner ══════════ -->
 <div id="cookie-banner" class="fixed inset-x-0 bottom-0 z-50 p-3 sm:p-4">
   <div class="mx-auto flex max-w-3xl flex-col gap-3 rounded-[14px] border border-rule bg-card p-4 shadow-[0_8px_28px_rgb(19_26_23/0.14)] sm:flex-row sm:items-center">
-    <p class="flex-1 text-[13px] leading-relaxed text-soft">
-      Kasutame küpsiseid, et näha, kust külastajad tulevad — Auto24-st, Instagramist või TikTokist. Statistikaküpsised on valikulised.
+      <p class="flex-1 text-[13px] leading-relaxed text-soft">
+      Мы используем cookies, чтобы понимать, откуда приходят посетители — из Auto24, Instagram или TikTok. Статистические cookies необязательны.
     </p>
     <div class="flex items-center gap-2 text-[12px] leading-tight text-soft">
-      <span class="uppercase tracking-[.12em]">Skeem</span>
+      <span class="uppercase tracking-[.12em]">Схема</span>
       <span id="cookie-scheme-name" class="font-medium text-ink"></span>
     </div>
     <div class="flex shrink-0 gap-2">
-      <button id="cookie-decline" type="button" class="h-9 rounded-[9px] border border-rule px-3 text-[13px] font-medium transition-colors hover:bg-paper">Ainult vajalikud</button>
-      <button type="button" class="h-9 rounded-[9px] bg-pine px-3 text-[13px] font-semibold text-white transition-colors hover:bg-pinedark">Nõustun</button>
+      <button id="cookie-decline" type="button" class="h-9 rounded-[9px] border border-rule px-3 text-[13px] font-medium transition-colors hover:bg-paper">Только необходимые</button>
+      <button type="button" class="h-9 rounded-[9px] bg-pine px-3 text-[13px] font-semibold text-white transition-colors hover:bg-pinedark">Принять</button>
     </div>
   </div>
 </div>
@@ -782,15 +783,15 @@
   var schemeName = document.getElementById('cookie-scheme-name');
   var schemeKey = 'cubcar-ui-scheme-v1';
   var schemes = [
-    { name: 'Mänd', h: 156, a: 161, w: 44, c: 16 },
-    { name: 'Teras', h: 204, a: 208, w: 46, c: 18 },
-    { name: 'Indigo', h: 248, a: 252, w: 45, c: 16 },
-    { name: 'Messing', h: 18, a: 26, w: 52, c: 14 },
-    { name: 'Marja', h: 332, a: 336, w: 46, c: 16 },
-    { name: 'Oliiv', h: 92, a: 104, w: 48, c: 18 },
-    { name: 'Rooste', h: 46, a: 54, w: 50, c: 20 },
-    { name: 'Grafiit', grey: true, h: 0, a: 0, w: 0, c: 0 },
-    { name: 'Sinakas teras / messing', h: 214, a: 218, w: 40, c: 24 }
+    { name: 'Сосна', h: 156, a: 161, w: 44, c: 16 },
+    { name: 'Сталь', h: 204, a: 208, w: 46, c: 18 },
+    { name: 'Индиго', h: 248, a: 252, w: 45, c: 16 },
+    { name: 'Латунь', h: 18, a: 26, w: 52, c: 14 },
+    { name: 'Ягода', h: 332, a: 336, w: 46, c: 16 },
+    { name: 'Олива', h: 92, a: 104, w: 48, c: 18 },
+    { name: 'Ржавчина', h: 46, a: 54, w: 50, c: 20 },
+    { name: 'Графит', grey: true, h: 0, a: 0, w: 0, c: 0 },
+    { name: 'Синяя сталь / латунь', h: 214, a: 218, w: 40, c: 24 }
   ];
   var schemeIndex = 0;
 
@@ -922,6 +923,8 @@
   }
 })();
 </script>
+
+<script src="cc_ru.js"></script>
 
 </body>
 </html>
