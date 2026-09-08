@@ -90,9 +90,9 @@
     var style = document.createElement('style');
     style.id = LANG_STYLE_ID;
     style.textContent = [
-      '[data-lang-switch] { transition: opacity .18s ease, background-color .18s ease, color .18s ease, border-color .18s ease; }',
-      '[data-lang-switch].is-active { pointer-events: none; opacity: 1; }',
-      '[data-lang-switch].is-inactive { opacity: .72; }',
+      '[data-lang-switch] { transition: opacity .18s ease, background-color .18s ease, color .18s ease, border-color .18s ease, box-shadow .18s ease; }',
+      '[data-lang-switch].is-active, [data-lang-switch][aria-current="page"] { opacity: 1; font-weight: 700; text-decoration: none; background-color: color-mix(in srgb, currentColor 12%, transparent); box-shadow: inset 0 0 0 1px currentColor, inset 0 0 0 999px color-mix(in srgb, currentColor 12%, transparent); }',
+      '[data-lang-switch].is-inactive { opacity: .58; }',
       '[data-lang-switch].is-inactive:hover { opacity: 1; }'
     ].join('\\n');
     document.head.appendChild(style);

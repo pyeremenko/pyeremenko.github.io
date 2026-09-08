@@ -135,8 +135,8 @@
       </button>
 
       <div class="hidden items-center rounded-plate border border-line bg-card p-0.5 text-[13px] sm:flex">
-        <a href="?lang=et" data-lang-switch="et" aria-current="page" class="rounded-[3px] bg-pine px-2 py-1 font-medium text-white">k_et</a>
-        <a href="?lang=ru" data-lang-switch="ru" class="rounded-[3px] px-2 py-1 text-muted-foreground transition-colors hover:text-ink">k_ru</a>
+        <a href="cc_v2.html?lang=et" data-lang-switch="et" class="rounded-[3px] px-2 py-1 text-muted-foreground transition-colors hover:text-ink">k_et</a>
+        <a href="cc_v2.html?lang=ru" data-lang-switch="ru" class="rounded-[3px] px-2 py-1 text-muted-foreground transition-colors hover:text-ink">k_ru</a>
         <button class="rounded-[3px] px-2 py-1 text-muted-foreground transition-colors hover:text-ink">k_en</button>
         <button class="rounded-[3px] px-2 py-1 text-muted-foreground transition-colors hover:text-ink">k_fi</button>
       </div>
@@ -845,7 +845,7 @@
     var neutral = scheme.grey === true;
     var muted = !neutral && (index % 2 === 1);
     var comp = hue(scheme.h, 180);
-    var trustDark = (index % schemes.length) === 5;
+    var trustDark = dark; // || (index % schemes.length) === 5; // so far always to be true
     setVars({
       paper: hsl(neutral ? 0 : hue(scheme.h, 8), neutral ? 2 : (muted ? 4 : 18), dark ? 11 : 97),
       card: hsl(neutral ? 0 : hue(scheme.h, 3), neutral ? 2 : (muted ? 3 : 10), dark ? 15 : 100),
